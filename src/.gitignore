@@ -1,0 +1,14 @@
+# Ignore Node.js dependencies
+/node_modules
+
+# Ignore build artifacts
+/build
+/dist
+
+# Ignore IDE/Editor specific files
+.vscode
+.idea
+
+# Ignore compiled CSS and JavaScript files
+*.css.map
+*.js.map
