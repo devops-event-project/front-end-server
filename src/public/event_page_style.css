@@ -5,8 +5,6 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
-    flex-direction: column;
-    align-items: center;
 }
 
 h2 {
@@ -118,3 +116,49 @@ button:hover {
     } 
 
 
+
+
+/*Flex-box*/
+
+
+
+.container {
+    display: flex;
+    justify-content: center; /* Center the child divs on the page */
+    align-items: flex-start; /* Align to the start of the container */
+    width: 100%; /* Full width */
+    height: 100vh; /* Full height */
+}
+
+.left-container,
+.right-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center; /* Center content vertically */
+    align-items: center; /* Center content horizontally */
+    width: 50%; /* Take up half the width of the container */
+}
+
+
+/*Code for sorting buttons*/
+
+
+.sorting-buttons {
+    padding: 20px 35px; /* Increase padding for a "fatter" button */
+    font-size: 2rem; /* Increase font size for better visibility */
+    cursor: pointer;
+    min-width: 100px; /* Increase minimum width if necessary */
+    display: flex; /* This will place the buttons on the same line */
+    justify-content: center; /* Center the buttons within their container */
+    gap: 10px; /* Optional: adds some space between the two buttons */
+}
+
+.sorting-buttons button {
+    padding: 5px 10px; /* Reduced padding */
+    font-size: 1.5rem; /* Smaller font size */
+    cursor: pointer; /* Change cursor to pointer to indicate clickable */
+    /* Optional: set explicit width if needed */
+    width: auto; /* Adjust the width based on content */
+    min-width: 50px; /* Minimum width to ensure button is not too small */
+    /* Other styles (border, background, etc.) */
+}

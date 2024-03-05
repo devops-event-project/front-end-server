@@ -8,44 +8,59 @@
 </head>
 <body>
 
-<h2>Create Event</h2>
-
-<form id="calendarForm">
-    <label for="title">Title:</label>
-    <input type="text" id="title" name="title" required><br>
-
-    <label for="description">Description:</label>
-    <textarea id="description" name="description" rows="4" required></textarea><br>
-
-    <label for="attendees">Attendees (Emails separated by comma):</label>
-    <input type="text" id="attendees" name="attendees" placeholder="example1@example.com, example2@example.com"><br>
-
-    <label for="startDateTime">Start Date and Time:</label>
-    <input type="datetime-local" id="startDateTime" name="startDateTime" required><br>
-
-    <label for="endDateTime">End Date and Time:</label>
-    <input type="datetime-local" id="endDateTime" name="endDateTime" required><br>
-
-    <label for="location">Location:</label>
-    <input type="text" id="location" name="location" required><br>
-
-    <label for="reminderType">Reminder Type:</label>
-    <select id="reminderType" name="reminderType">
-        <option value="email">Email</option>
-    </select><br>
-
-    <label for="timeBefore">Time Before (minutes):</label>
-    <input type="number" id="timeBefore" name="timeBefore" required><br>
-
-    <button type="button" onclick="submitForm()">Create Event</button>
-</form>
-
-<button onclick="sortEvents('time')" style="width: 150px;">Sort by Time</button>
-<button onclick="sortEvents('location')" style="width: 150px;">Sort by Location</button>
-
-<div id="eventsContainer"></div>
-
-<script src="event_info.js"></script>
-
-</body>
+    <div class="container">
+        <div class="left-container">
+            <!-- Left-side content: Sorting Buttons and Event List -->
+            <div class="sorting-buttons">
+                <button onclick="sortEvents('time')">Sort by Time</button>
+                <button onclick="sortEvents('location')">Sort by Location</button>
+            </div>
+            <div id="eventsContainer"></div> <!-- Events will be displayed here -->
+        </div>
+        <div class="right-container">
+            <!-- Right-side content: Form -->
+            <h2>Create Event</h2>
+            <form id="calendarForm">
+                <label for="title">Title:</label>
+                <input type="text" id="title" name="title" required><br>
+            
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" rows="4" required></textarea><br>
+            
+                <label for="attendees">Attendees (Emails separated by comma):</label>
+                <input type="text" id="attendees" name="attendees" placeholder="example1@example.com, example2@example.com"><br>
+            
+                <label for="startDateTime">Start Date and Time:</label>
+                <input type="datetime-local" id="startDateTime" name="startDateTime" required><br>
+            
+                <label for="endDateTime">End Date and Time:</label>
+                <input type="datetime-local" id="endDateTime" name="endDateTime" required><br>
+            
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" required><br>
+            
+                <label for="reminderType">Reminder Type:</label>
+                <select id="reminderType" name="reminderType">
+                    <option value="email">Email</option>
+                </select><br>
+            
+                <label for="timeBefore">Time Before (minutes):</label>
+                <input type="number" id="timeBefore" name="timeBefore" required><br>
+            
+                <button type="button" onclick="submitForm()">Create Event</button>
+            </form>
+        </div>
+    </div>
+    
+    <script src="event_info.js"></script>
+    
+    </body>
 </html>
+
+
+
+
+
+
+
+
