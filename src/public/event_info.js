@@ -4,6 +4,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
+
+function logout() {
+
+    sessionStorage.clear(); // or localStorage.clear();
+    // Redirect to the login page
+    window.location.href = 'login.html';
+}
+
 let events = [
     {
         attendees: "a@gmail.com",
@@ -39,6 +47,32 @@ window.onload = function() {
     displayEvents();
 };
 
+function validateAttendees(attendees) {
+    // Trim the input and check if empty
+    const trimmedAttendees = attendees.trim();
+    if (!trimmedAttendees) {
+        alert('At least one attendee email is required.');
+        return false;
+    }
+
+    // Define a regular expression pattern for the email
+    const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+    // Split the attendees string by commas to process each email
+    const emailsArray = trimmedAttendees.split(',').map(email => email.trim());
+
+    // Check each email against the regex pattern
+    for (const email of emailsArray) {
+        if (!emailRegex.test(email)) {
+            alert(`Invalid email format: ${email}`);
+            return false;
+        }
+    }
+
+    // If all emails pass the regex test, return true
+    return true;
+}
+
 function submitForm() {
     const form = document.getElementById('calendarForm');
     const formData = new FormData(form);
@@ -50,6 +84,11 @@ function submitForm() {
     formData.forEach(function(value, key){
         formObject[key] = value;
     });
+
+    // Validate form data
+    if (!validateFormData(formObject)) {
+        return; // Stop the function if validation fails
+    }
     
     // Add a randomly generated user ID to the object
     formObject['userId'] = generateRandomUserID();
@@ -85,14 +124,40 @@ function submitForm() {
     form.reset();
 
     displayEvents(); // Call this function to update the UI with the latest events
+}
 
-    
+function validateFormData(formObject) {
+    // Check if any of the required fields are empty
+    if (!formObject.title.trim()) {
+        alert('Title is required.');
+        return false;
+    }
+    if (!formObject.description.trim()) {
+        alert('Description is required.');
+        return false;
+    }
+    if (!formObject.location.trim()) {
+        alert('Location is required.');
+        return false;
+    }
+    if (!formObject.startDateTime.trim()) {
+        alert('Start Date and Time are required.');
+        return false;
+    }
+    if (!formObject.endDateTime.trim()) {
+        alert('End Date and Time are required.');
+        return false;
+    }
+    if (!formObject.timeBefore.trim()) {
+        alert('Time Before (minutes) is required.');
+        return false;
+    }
 
+    return validateAttendees(formObject.attendees);
 }
 
 function generateRandomUserID() {
     // This generates a random number between 1 and 10000 as a user ID
-    // Adjust the range according to your needs
     return Math.floor(Math.random() * 10000) + 1;
 }
 

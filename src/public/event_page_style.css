@@ -1,7 +1,7 @@
 body {
     font-family: Arial, sans-serif;
-    background-color: #f8f8f8; /* Light gray background */
-    color: #333; /* Black text */
+    background-color: #f8f8f8; 
+    color: #333; 
     margin: 0;
     padding: 0;
     display: flex;
@@ -9,7 +9,7 @@ body {
 
 h2 {
     text-align: center;
-    color: #000; /* Black heading */
+    color: #000; 
 }
 
 #existingEvents {
@@ -20,10 +20,10 @@ h2 {
 }
 
 .eventBox {
-    background-color: #fff; /* White background */
+    background-color: #fff; 
     padding: 10px;
     border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Light shadow */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
     width: 150px;
     margin: 10px;
     text-align: center;
@@ -32,7 +32,7 @@ h2 {
 label {
     display: block;
     margin-bottom: 8px;
-    color: #000; /* Black label text */
+    color: #000; 
 }
 
 input,
@@ -41,14 +41,14 @@ select {
     width: 100%;
     padding: 8px;
     margin-bottom: 12px;
-    border: 1px solid #ccc; /* Light gray border */
+    border: 1px solid #ccc; 
     border-radius: 4px;
     box-sizing: border-box;
 }
 
 button {
-    background-color: #000; /* Black button background */
-    color: #fff; /* White button text */
+    background-color: #000; 
+    color: #fff; 
     padding: 10px;
     border: none;
     border-radius: 4px;
@@ -57,108 +57,114 @@ button {
 }
 
 button:hover {
-    background-color: #222; /* Darker black on hover */
+    background-color: #222; 
 }
-
-
-/*
-*/
-
 
 .eventBox {
     position: relative;
 
-    background-color: #fff; /* White background */
-    padding: 20px; /* Ample padding for content */
-    margin: 20px auto; /* Margin for spacing around boxes and centering */
-    border-radius: 8px; /* Rounded corners for a softer look */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
-    width: 500px; /* Stable and large fixed width */
-    text-align: left; /* Aligns text to the left for readability */
-    display: flex; /* Ensures content inside is flexibly laid out */
-    flex-direction: column; /* Stacks content vertically */
-    justify-content: start; /* Aligns content to the start of the flex direction */
-    align-items: flex-start; /* Aligns items to the start of their container */
+    background-color: #fff; 
+    padding: 20px; 
+    margin: 20px auto; 
+    border-radius: 8px; 
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); 
+    width: 500px; 
+    text-align: left; 
+    display: flex; 
+    flex-direction: column; 
+    justify-content: start; 
+    align-items: flex-start; 
 }
 
-
 .eventBox {
-    /* Existing styles */
-    width: 100%; /* Full width of the container */
-    max-width: 320px; /* Maximum width */
-    margin-bottom: 20px; /* Increase spacing between boxes */
+
+    width: 100%; 
+    max-width: 320px; 
+    margin-bottom: 20px; 
 }
 .eventBox p {
     color: #666;
 }
 
-
-
-
-
 .delete-btn {
     position: absolute;
-    bottom: 5px; /* Adjust as needed for spacing from the bottom */
-    right: 5px; /* Adjust as needed for spacing from the right */
-    padding: 2px 5px; /* Adjust based on your preference */
-    font-size: 0.8em; /* Smaller font size */
+    bottom: 5px; 
+    right: 5px; 
+    padding: 2px 5px; 
+    font-size: 0.8em; 
     cursor: pointer;
-    
-    padding: 2px 5px; /* Smaller padding */
-    font-size: 0.8em; /* Smaller font size */
-    width: auto; /* Auto width based on content, remove if you want explicit width */
-    height: auto; /* Auto height based on content, remove if you want explicit height */
-    line-height: 1; /* Adjust line height to ensure button is not too tall */
-    margin: 13px; /* Less margin around the button */
-    min-width: 50px; /* Minimum width to ensure button is not too small */
-    min-height: 20px; /* Minimum height to ensure button is not too small */
-    cursor: pointer; /* Change cursor to pointer to indicate clickable */
+
+    padding: 2px 5px; 
+    font-size: 0.8em; 
+    width: auto; 
+    height: auto; 
+    line-height: 1; 
+    margin: 13px; 
+    min-width: 50px; 
+    min-height: 20px; 
+    cursor: pointer; 
     } 
-
-
-
-
-/*Flex-box*/
-
-
 
 .container {
     display: flex;
-    justify-content: center; /* Center the child divs on the page */
-    align-items: flex-start; /* Align to the start of the container */
-    width: 100%; /* Full width */
-    height: 100vh; /* Full height */
+    justify-content: center; 
+    align-items: flex-start; 
+    width: 100%; 
+    height: 100vh; 
 }
 
-.left-container,
+.left-container{
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start; 
+    align-items: center; 
+    width: 50%; 
+
+}
+
+
 .right-container {
     display: flex;
     flex-direction: column;
-    justify-content: center; /* Center content vertically */
-    align-items: center; /* Center content horizontally */
-    width: 50%; /* Take up half the width of the container */
+    justify-content: flex-start; 
+    align-items: flex-start;
+    width: 50%; 
 }
 
-
-/*Code for sorting buttons*/
-
-
 .sorting-buttons {
-    padding: 20px 35px; /* Increase padding for a "fatter" button */
-    font-size: 2rem; /* Increase font size for better visibility */
+    padding: 20px 35px; 
+    font-size: 2rem; 
     cursor: pointer;
-    min-width: 100px; /* Increase minimum width if necessary */
-    display: flex; /* This will place the buttons on the same line */
-    justify-content: center; /* Center the buttons within their container */
-    gap: 10px; /* Optional: adds some space between the two buttons */
+    min-width: 100px; 
+    display: flex; 
+    justify-content: center; 
+    gap: 10px; 
 }
 
 .sorting-buttons button {
-    padding: 5px 10px; /* Reduced padding */
-    font-size: 1.5rem; /* Smaller font size */
-    cursor: pointer; /* Change cursor to pointer to indicate clickable */
-    /* Optional: set explicit width if needed */
-    width: auto; /* Adjust the width based on content */
-    min-width: 50px; /* Minimum width to ensure button is not too small */
-    /* Other styles (border, background, etc.) */
+    padding: 5px 10px; 
+    font-size: 1.2rem; 
+    cursor: pointer; 
+
+    width: auto; 
+    min-width: 50px; 
+
+}
+
+
+#logoutButton {
+    position: fixed; 
+    top: 20px; 
+    right: 20px; 
+    padding: 5px 10px; 
+    font-size: 0.8rem; 
+    background-color: #000; 
+    color: #fff; 
+    border: none; 
+    border-radius: 4px; 
+    cursor: pointer; 
+    z-index: 1000;
+
+    width: auto; 
+    min-width: 50px; 
 }

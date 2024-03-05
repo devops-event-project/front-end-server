@@ -3,64 +3,43 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Calendar Form</title>
-    <link rel="stylesheet" href="event_page_style.css">
+    <title>Login/Sign Up</title>
+    <link rel="stylesheet" href="login_user_style.css">
+    <script src="login.js" defer></script>
 </head>
 <body>
+<div class="auth-container">
+    <div class="login-container">
+        <h2>Login</h2>
+        <form id="loginForm">
+            <label for="loginEmail">Email:</label>
+            <input type="email" id="loginEmail" name="loginEmail" required>
 
-    <div class="container">
-        <div class="left-container">
-            <!-- Left-side content: Sorting Buttons and Event List -->
-            <div class="sorting-buttons">
-                <button onclick="sortEvents('time')">Sort by Time</button>
-                <button onclick="sortEvents('location')">Sort by Location</button>
-            </div>
-            <div id="eventsContainer"></div> <!-- Events will be displayed here -->
-        </div>
-        <div class="right-container">
-            <!-- Right-side content: Form -->
-            <h2>Create Event</h2>
-            <form id="calendarForm">
-                <label for="title">Title:</label>
-                <input type="text" id="title" name="title" required><br>
-            
-                <label for="description">Description:</label>
-                <textarea id="description" name="description" rows="4" required></textarea><br>
-            
-                <label for="attendees">Attendees (Emails separated by comma):</label>
-                <input type="text" id="attendees" name="attendees" placeholder="example1@example.com, example2@example.com"><br>
-            
-                <label for="startDateTime">Start Date and Time:</label>
-                <input type="datetime-local" id="startDateTime" name="startDateTime" required><br>
-            
-                <label for="endDateTime">End Date and Time:</label>
-                <input type="datetime-local" id="endDateTime" name="endDateTime" required><br>
-            
-                <label for="location">Location:</label>
-                <input type="text" id="location" name="location" required><br>
-            
-                <label for="reminderType">Reminder Type:</label>
-                <select id="reminderType" name="reminderType">
-                    <option value="email">Email</option>
-                </select><br>
-            
-                <label for="timeBefore">Time Before (minutes):</label>
-                <input type="number" id="timeBefore" name="timeBefore" required><br>
-            
-                <button type="button" onclick="submitForm()">Create Event</button>
-            </form>
-        </div>
+            <label for="loginPassword">Password:</label>
+            <input type="password" id="loginPassword" name="loginPassword" required>
+
+            <button type="submit">Login</button>
+        </form>
     </div>
-    
-    <script src="event_info.js"></script>
-    
-    </body>
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <form id="signupForm">
+            <label for="signupEmail">Email:</label>
+            <input type="email" id="signupEmail" name="signupEmail" required>
+
+            <label for="signupPassword">Password:</label>
+            <input type="password" id="signupPassword" name="signupPassword" required>
+
+            <label for="confirmPassword">Confirm Password:</label>
+            <input type="password" id="confirmPassword" name="confirmPassword" required>
+
+            <button type="submit">Sign Up</button>
+        </form>
+        
+    </div>
+</div>
+<div class="log-button-container" style="margin-top: 20px; text-align: center;">
+            <button onclick="getUserData()">Log User Data</button>
+</div>
+</body>
 </html>
-
-
-
-
-
-
-
-
