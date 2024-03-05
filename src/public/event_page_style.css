@@ -61,3 +61,60 @@ button {
 button:hover {
     background-color: #222; /* Darker black on hover */
 }
+
+
+/*
+*/
+
+
+.eventBox {
+    position: relative;
+
+    background-color: #fff; /* White background */
+    padding: 20px; /* Ample padding for content */
+    margin: 20px auto; /* Margin for spacing around boxes and centering */
+    border-radius: 8px; /* Rounded corners for a softer look */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    width: 500px; /* Stable and large fixed width */
+    text-align: left; /* Aligns text to the left for readability */
+    display: flex; /* Ensures content inside is flexibly laid out */
+    flex-direction: column; /* Stacks content vertically */
+    justify-content: start; /* Aligns content to the start of the flex direction */
+    align-items: flex-start; /* Aligns items to the start of their container */
+}
+
+
+.eventBox {
+    /* Existing styles */
+    width: 100%; /* Full width of the container */
+    max-width: 320px; /* Maximum width */
+    margin-bottom: 20px; /* Increase spacing between boxes */
+}
+.eventBox p {
+    color: #666;
+}
+
+
+
+
+
+.delete-btn {
+    position: absolute;
+    bottom: 5px; /* Adjust as needed for spacing from the bottom */
+    right: 5px; /* Adjust as needed for spacing from the right */
+    padding: 2px 5px; /* Adjust based on your preference */
+    font-size: 0.8em; /* Smaller font size */
+    cursor: pointer;
+    
+    padding: 2px 5px; /* Smaller padding */
+    font-size: 0.8em; /* Smaller font size */
+    width: auto; /* Auto width based on content, remove if you want explicit width */
+    height: auto; /* Auto height based on content, remove if you want explicit height */
+    line-height: 1; /* Adjust line height to ensure button is not too tall */
+    margin: 13px; /* Less margin around the button */
+    min-width: 50px; /* Minimum width to ensure button is not too small */
+    min-height: 20px; /* Minimum height to ensure button is not too small */
+    cursor: pointer; /* Change cursor to pointer to indicate clickable */
+    } 
+
+
