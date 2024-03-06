@@ -11,7 +11,7 @@
     border-radius: 8px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     width: 100%;
-    max-width: 320px; /* Adjust based on your preference */
+    max-width: 320px;
     text-align: center;
 }
 
@@ -28,7 +28,7 @@ label {
 input[type="email"],
 input[type="password"],
 select {
-    width: calc(100% - 16px); /* Adjust width to account for padding */
+    width: calc(100% - 16px); 
     padding: 8px;
     margin-bottom: 12px;
     border: 1px solid #ccc;

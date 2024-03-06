@@ -1,6 +1,6 @@
 document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('calendarForm').addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent the default form submission
+        e.preventDefault();
     });
 });
 
@@ -8,8 +8,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 function logout() {
 
     sessionStorage.clear(); // or localStorage.clear();
-    // Redirect to the login page
-    window.location.href = 'login.html';
+    window.location.href = 'index.html';
 }
 
 let events = [
@@ -38,7 +37,6 @@ let events = [
 ];
 
 window.onload = function() {
-    // Load saved events from localStorage
     const savedEvents = localStorage.getItem('events');
     if (savedEvents) {
         events = JSON.parse(savedEvents);
@@ -55,13 +53,10 @@ function validateAttendees(attendees) {
         return false;
     }
 
-    // Define a regular expression pattern for the email
     const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
-    // Split the attendees string by commas to process each email
     const emailsArray = trimmedAttendees.split(',').map(email => email.trim());
 
-    // Check each email against the regex pattern
     for (const email of emailsArray) {
         if (!emailRegex.test(email)) {
             alert(`Invalid email format: ${email}`);
@@ -69,7 +64,6 @@ function validateAttendees(attendees) {
         }
     }
 
-    // If all emails pass the regex test, return true
     return true;
 }
 
@@ -77,20 +71,16 @@ function submitForm() {
     const form = document.getElementById('calendarForm');
     const formData = new FormData(form);
     
-    // Create an object to hold the form data
     let formObject = {};
     
-    // Convert FormData into a regular object
     formData.forEach(function(value, key){
         formObject[key] = value;
     });
 
-    // Validate form data
     if (!validateFormData(formObject)) {
         return; // Stop the function if validation fails
     }
     
-    // Add a randomly generated user ID to the object
     formObject['userId'] = generateRandomUserID();
 
     events.push(formObject);

@@ -7,16 +7,9 @@ function handleSignUp() {
     // Construct the user data object
     const userData = { email, hashedPassword }; // Add more fields as needed
 
-    // Store the userData object in localStorage using the email as the key
     localStorage.setItem(email, JSON.stringify(userData));
 
-    // localStorage.setItem('loggedInUserEmail', email);
-
     alert('User signed up successfully!');
-    
-    // getUserData(email); // Pass the email to getUserData to fetch and log specific user's data
-    // logAllLocalStorageData();
-
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
@@ -97,35 +90,3 @@ document.addEventListener('DOMContentLoaded', (event) => {
         }
     });
 });
-
-
-
-
-// async function handleSignUp() {
-//     const userData = {
-//         email: document.getElementById('signupEmail').value,
-//         password: document.getElementById('signupPassword').value,
-//         // Ensure you hash passwords before sending them over the internet!
-//     };
-
-//     try {
-//         const response = await fetch('https://backend.com/api/signup', {
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify(userData),
-//         });
-
-//         if (!response.ok) throw new Error('Network response was not ok');
-
-//         const result = await response.json();
-//         console.log(result);
-//         alert('User signed up successfully!');
-//     } catch (error) {
-//         console.error('Signup error:', error);
-//         alert('Failed to sign up');
-//     }
-// }
-
-
