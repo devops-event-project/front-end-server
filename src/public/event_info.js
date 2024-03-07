@@ -78,46 +78,26 @@ function submitForm() {
     });
 
     if (!validateFormData(formObject)) {
-        return; // Stop the function if validation fails
+        return; 
     }
     
     formObject['userId'] = generateRandomUserID();
 
     events.push(formObject);
 
-    // Convert the object into a JSON string
     let json = JSON.stringify(formObject);
 
-    // console.log('JSON Data:', json);
     console.log('JSON', events)
 
-    // Send the JSON data using Fetch API
-    // fetch('your-endpoint-url', {
-    //     method: 'POST',
-    //     headers: {
-    //         'Content-Type': 'application/json', // Indicate that we're sending JSON data
-    //     },
-    //     body: json, // Send the JSON string
-    // }).then(response => {
-    //     if (response.ok) {
-    //         return response.json(); // Assuming the server responds with JSON
-    //     }
-    //     throw new Error('Network response was not ok.');
-    // }).then(data => {
-    //     console.log('Success:', data);
-    // }).catch(error => {
-    //     console.error('There has been a problem with your fetch operation:', error);
-    // });
-    // Convert events array to a string and save in localStorage
+   
     localStorage.setItem('events', JSON.stringify(events));
     console.log('EVENTS LIST', events);
     form.reset();
 
-    displayEvents(); // Call this function to update the UI with the latest events
+    displayEvents(); 
 }
 
 function validateFormData(formObject) {
-    // Check if any of the required fields are empty
     if (!formObject.title.trim()) {
         alert('Title is required.');
         return false;
@@ -147,28 +127,24 @@ function validateFormData(formObject) {
 }
 
 function generateRandomUserID() {
-    // This generates a random number between 1 and 10000 as a user ID
     return Math.floor(Math.random() * 10000) + 1;
 }
 
 function sortEvents(criteria) {
     if (criteria === 'time') {
-        // Sort by startDateTime
         events.sort((a, b) => new Date(a.startDateTime) - new Date(b.startDateTime));
     } else if (criteria === 'location') {
-        // Sort alphabetically by location
         events.sort((a, b) => a.location.localeCompare(b.location));
     }
 
-    displayEvents(); // Re-display the events after sorting
+    displayEvents(); 
 }
 
 function displayEvents() {
     const container = document.getElementById('eventsContainer');
-    container.innerHTML = ''; // Clear previous content
+    container.innerHTML = ''; 
 
     events.forEach((event, index) => {
-        // Format start and end times
         const startTime = new Date(event.startDateTime).toLocaleString('en-GB', {
             day: '2-digit', month: 'short', year: 'numeric', 
             hour: '2-digit', minute: '2-digit', hour12: false
@@ -192,18 +168,12 @@ function displayEvents() {
 
 
 function deleteEvent(index) {
-    // Confirm before deleting
     if (!confirm("Are you sure you want to delete this event?")) {
         return;
     }
-
-    // Remove the event at the given index
     events.splice(index, 1);
-    
-    // Update localStorage with the new list of events
     localStorage.setItem('events', JSON.stringify(events));
     
-    // Re-display the updated list of events
     displayEvents();
 }
 

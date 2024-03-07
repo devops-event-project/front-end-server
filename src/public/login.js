@@ -4,8 +4,7 @@ function handleSignUp() {
 
     const hashedPassword = btoa(password);
 
-    // Construct the user data object
-    const userData = { email, hashedPassword }; // Add more fields as needed
+    const userData = { email, hashedPassword }; 
 
     localStorage.setItem(email, JSON.stringify(userData));
 
@@ -13,19 +12,14 @@ function handleSignUp() {
 }
 
 document.addEventListener('DOMContentLoaded', (event) => {
-    // Select the signup form
     const signupForm = document.getElementById('signupForm');
 
-    // Add an event listener for the 'submit' event
     signupForm.addEventListener('submit', function(e) {
-        e.preventDefault(); // Prevent the default form submission behavior
-
-        // Call the handleSignUp function to process the signup
+        e.preventDefault(); 
         handleSignUp();
     });
 });
 
-// getUserData(); 
 
 function logAllLocalStorageData() {
     console.log('All saved user data in localStorage:');
@@ -40,7 +34,6 @@ function logAllLocalStorageData() {
 function getUserData(email) {
     if (!email) {
         console.log("I was here");
-        // If no email is provided, attempt to get the logged-in user's email
         email = localStorage.getItem('loggedInUserEmail');
     }
     console.log("I got here");
@@ -58,27 +51,20 @@ function getUserData(email) {
 }
 
 
-
-
-
 document.addEventListener('DOMContentLoaded', (event) => {
     console.log("I WAS PRESENT AT LOGIN");
     const loginForm = document.getElementById('loginForm');
     
     loginForm.addEventListener('submit', function(event) {
-        event.preventDefault(); // Prevent form from submitting normally
+        event.preventDefault(); 
 
         const email = document.getElementById('loginEmail').value; 
         const password = document.getElementById('loginPassword').value;
-        const hashedPassword = btoa(password); // Simple encoding for demonstration
+        const hashedPassword = btoa(password); 
         const storedUserDataString = localStorage.getItem(email);
-        console.log('I WAS HERE lala');
-        console.log("STORED STRING", storedUserDataString);
 
         if (storedUserDataString) {
-            console.log("GONE");
-            // const storedUserData = JSON.parse(storedUserDataString);
-            // console.log("STORED USER DATA: ", storedUserData);
+    
             if (storedUserDataString === hashedPassword) {
                 localStorage.setItem('loggedInUserEmail', email);
                 window.location.href = 'event_page.html';
