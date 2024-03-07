@@ -33,7 +33,6 @@ function getEventsForCurrentUser() {
 }
 
 
-
 window.onload = function() {
     const savedEvents = localStorage.getItem('events');
     if (savedEvents) {
@@ -137,12 +136,12 @@ function sortEvents(criteria) {
 }
 
 function displayEvents(optionalEvents) {
-    console.log("OPTIONAL EVENTS ", optionalEvents);
+    // console.log("OPTIONAL EVENTS ", optionalEvents);
     const container = document.getElementById('eventsContainer');
     container.innerHTML = ''; 
 
     const events = optionalEvents || getEventsForCurrentUser(); 
-    console.log("INSIDE DISPLAY EVENTS FUNCTION ", events);
+    // console.log("INSIDE DISPLAY EVENTS FUNCTION ", events);
     events.forEach((event, index) => {
         const startTime = new Date(event.startDateTime).toLocaleString('en-GB', {
             day: '2-digit', month: 'short', year: 'numeric', 
@@ -232,6 +231,39 @@ function sortEvents(criteria) {
     displayEvents(events); // Pass the sorted events to your display function
 }
 
+
+function populateLocationDropdown() {
+    const locationFilter = document.getElementById('locationFilter');
+    const events = getEventsForCurrentUser();
+
+    // Extract unique locations
+    const uniqueLocations = Array.from(new Set(events.map(event => event.location)));
+
+    // Populate the dropdown
+    uniqueLocations.forEach(location => {
+        const option = document.createElement('option');
+        option.value = location;
+        option.textContent = location;
+        locationFilter.appendChild(option);
+    });
+
+
+}
+
+document.getElementById('applyLocationFilter').addEventListener('click', () => {
+    const selectedLocation = document.getElementById('locationFilter').value;
+    let filteredEvents = getEventsForCurrentUser();
+
+    // Filter if a specific location is selected
+    if (selectedLocation !== "all") {
+        filteredEvents = filteredEvents.filter(event => event.location === selectedLocation);
+    }
+
+    displayEvents(filteredEvents); 
+});
+
+
+
 // const BASE_URL = 'http://127.0.0.1:8000'; 
 
 // async function apiFetch(url, method, data) {
@@ -258,6 +290,7 @@ function sortEvents(criteria) {
 //         const data = await apiFetch('/event/', 'POST', eventData);
 //         console.log('Event created successfully:', data);
 //         // Refresh or redirect
+            // TODO - response with message codes 200, 404, 500
 //     } catch (error) {
 //         console.error('Failed to create event:', error);
 //         alert('Failed to create event. Please try again.');
