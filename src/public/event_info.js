@@ -136,12 +136,13 @@ function sortEvents(criteria) {
     displayEvents(); 
 }
 
-function displayEvents() {
+function displayEvents(optionalEvents) {
+    console.log("OPTIONAL EVENTS ", optionalEvents);
     const container = document.getElementById('eventsContainer');
     container.innerHTML = ''; 
 
-    const events = getEventsForCurrentUser(); 
-
+    const events = optionalEvents || getEventsForCurrentUser(); 
+    console.log("INSIDE DISPLAY EVENTS FUNCTION ", events);
     events.forEach((event, index) => {
         const startTime = new Date(event.startDateTime).toLocaleString('en-GB', {
             day: '2-digit', month: 'short', year: 'numeric', 
@@ -179,10 +180,10 @@ function getEventsForCurrentUser() {
 
     const userEventsKey = `events_${loggedInUserId}`;
     const eventsJson = localStorage.getItem(userEventsKey);
-    console.log('Retrieved Events JSON:', eventsJson);
+    // console.log('Retrieved Events JSON:', eventsJson);
     
     const events = eventsJson ? JSON.parse(eventsJson) : [];
-    console.log('Parsed Events:', events);
+    // console.log('Parsed Events:', events);
     return events;
 }
 
@@ -199,12 +200,9 @@ function deleteEvent(index) {
     if (eventsJson) {
         const events = JSON.parse(eventsJson);
 
-        console.log('Before deletion:', events);
-
         if (confirm('Are you sure you want to delete this event?')) {
             events.splice(index, 1);
             localStorage.setItem(userEventsKey, JSON.stringify(events));
-            console.log('After deletion:', events);
             displayEvents(); 
         }
     } else {
@@ -212,6 +210,27 @@ function deleteEvent(index) {
     }
 }
 
+function sortEvents(criteria) {
+    let events = getEventsForCurrentUser(); 
+    console.log('Displaying events before sorting FUNC:', events); // Debug log
+
+    if (!events || events.length === 0) {
+        console.log("No events found for sorting.");
+        return;
+    }
+
+    if (criteria === 'time') {
+        events.sort((a, b) => new Date(a.startDateTime) - new Date(b.startDateTime));
+        console.log("SORTED EVENTS BY TIME ", events);
+    } else if (criteria === 'location') {
+        events.sort((a, b) => a.location.localeCompare(b.location));
+    } else {
+        console.log("Invalid sorting criteria.");
+        return;
+    }
+
+    displayEvents(events); // Pass the sorted events to your display function
+}
 
 // const BASE_URL = 'http://127.0.0.1:8000'; 
 

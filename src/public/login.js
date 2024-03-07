@@ -22,22 +22,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 
-function logAllLocalStorageData() {
-    console.log('All saved user data in localStorage:');
-    for (let i = 0; i < localStorage.length; i++) {
-        const key = localStorage.key(i);
-        const value = localStorage.getItem(key);
-        console.log(`Key: ${key}, Value: ${value}`);
-    }
-}
-
 
 function getUserData(email) {
     if (!email) {
-        console.log("I was here");
         email = localStorage.getItem('loggedInUserEmail');
     }
-    console.log("I got here");
     if (email) {
         const userDataString = localStorage.getItem(email);
         if (userDataString) {
@@ -69,11 +58,11 @@ document.addEventListener('DOMContentLoaded', (event) => {
             const hashedPassword_storage = userObject.hashedPassword;
 
             if (hashedPassword_storage === hashedPassword) {
-                console.log("Password match. Logging in...");
+                // console.log("Password match. Logging in...");
                 localStorage.setItem('loggedInUserEmail', email); 
                 window.location.href = 'event_page.html'; 
             } else {
-                console.log("Password mismatch.");
+                // console.log("Password mismatch.");
                 alert('Invalid login credentials.'); 
             }
         } else {
