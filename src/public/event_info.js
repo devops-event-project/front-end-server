@@ -8,6 +8,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 function logout() {
 
     sessionStorage.clear(); // or localStorage.clear();
+    localStorage.setItem('loggedInUserEmail', "None");
     window.location.href = 'index.html';
 }
 
@@ -72,7 +73,6 @@ function submitForm() {
     const formData = new FormData(form);
     
     let formObject = {};
-    
     formData.forEach(function(value, key){
         formObject[key] = value;
     });
@@ -81,21 +81,24 @@ function submitForm() {
         return; 
     }
     
-    formObject['userId'] = generateRandomUserID();
+    // Assuming you've stored the logged-in user's ID in localStorage during login
+    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); // or 'loggedInUserId', based on your key
+    formObject['userId'] = loggedInUserId;
 
-    events.push(formObject);
+    // Retrieve existing events for the logged-in user
+    const userEventsKey = `events_${loggedInUserId}`;
+    const existingEvents = JSON.parse(localStorage.getItem(userEventsKey)) || [];
+    
+    existingEvents.push(formObject);
 
-    let json = JSON.stringify(formObject);
+    // Save the updated events array back to localStorage
+    localStorage.setItem(userEventsKey, JSON.stringify(existingEvents));
 
-    console.log('JSON', events)
-
-   
-    localStorage.setItem('events', JSON.stringify(events));
-    console.log('EVENTS LIST', events);
+    console.log('Event added:', formObject);
     form.reset();
-
-    displayEvents(); 
+    displayEvents(); // Update display
 }
+
 
 function validateFormData(formObject) {
     if (!formObject.title.trim()) {
