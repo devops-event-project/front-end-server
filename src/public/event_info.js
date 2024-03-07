@@ -13,18 +13,16 @@ function logout() {
 }
 
 function getEventsForCurrentUser() {
-    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); // Ensure this is set at login
+    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); 
     if (!loggedInUserId) {
         console.log("No logged-in user.");
         return;
     }
 
-    // Key to fetch user-specific events from localStorage
     const userEventsKey = `events_${loggedInUserId}`;
     const eventsJson = localStorage.getItem(userEventsKey);
     
     if (eventsJson) {
-        // This simulates the JSON response you'd get from a backend
         const userEvents = JSON.parse(eventsJson);
         console.log(`Events for user ${loggedInUserId}:`, userEvents);
         return userEvents;
@@ -35,30 +33,6 @@ function getEventsForCurrentUser() {
 }
 
 
-let events = [
-    {
-        attendees: "a@gmail.com",
-        description: "Amsterdam trip planning and itinerary discussions. Meeting to cover all the important places we want to visit and activities to do.",
-        endDateTime: "2024-03-14T15:00",
-        location: "Amsterdam",
-        reminderType: "email",
-        startDateTime: "2024-03-14T13:00",
-        timeBefore: "30",
-        title: "Amsterdam Trip Planning",
-        userId: 1234
-    },
-    {
-        attendees: "b@example.com, c@example.com",
-        description: "Quarterly review meeting to discuss project progress, upcoming milestones, and address any concerns.",
-        endDateTime: "2024-03-18T17:00",
-        location: "Office Board Room",
-        reminderType: "email",
-        startDateTime: "2024-03-18T15:00",
-        timeBefore: "15",
-        title: "Project Review Meeting",
-        userId: 5678
-    }
-];
 
 window.onload = function() {
     const savedEvents = localStorage.getItem('events');
@@ -70,7 +44,6 @@ window.onload = function() {
 };
 
 function validateAttendees(attendees) {
-    // Trim the input and check if empty
     const trimmedAttendees = attendees.trim();
     if (!trimmedAttendees) {
         alert('At least one attendee email is required.');
@@ -104,22 +77,19 @@ function submitForm() {
         return; 
     }
     
-    // Assuming you've stored the logged-in user's ID in localStorage during login
-    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); // or 'loggedInUserId', based on your key
+    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); 
     formObject['userId'] = loggedInUserId;
 
-    // Retrieve existing events for the logged-in user
     const userEventsKey = `events_${loggedInUserId}`;
     const existingEvents = JSON.parse(localStorage.getItem(userEventsKey)) || [];
     
     existingEvents.push(formObject);
 
-    // Save the updated events array back to localStorage
     localStorage.setItem(userEventsKey, JSON.stringify(existingEvents));
 
     console.log('Event added:', formObject);
     form.reset();
-    displayEvents(); // Update display
+    displayEvents();
 }
 
 
@@ -168,12 +138,11 @@ function sortEvents(criteria) {
 
 function displayEvents() {
     const container = document.getElementById('eventsContainer');
-    container.innerHTML = ''; // Clear existing content
+    container.innerHTML = ''; 
 
-    const events = getEventsForCurrentUser(); // Assuming this function fetches and logs events correctly
+    const events = getEventsForCurrentUser(); 
 
     events.forEach((event, index) => {
-        // Correctly define startTime and endTime using the event's startDateTime and endDateTime
         const startTime = new Date(event.startDateTime).toLocaleString('en-GB', {
             day: '2-digit', month: 'short', year: 'numeric', 
             hour: '2-digit', minute: '2-digit', hour12: false
@@ -193,16 +162,15 @@ function displayEvents() {
         `;
         const deleteButton = eventBox.querySelector('.delete-btn');
         deleteButton.addEventListener('click', function() {
-        deleteEvent(index); // Ensure 'index' is correct here
+        deleteEvent(index); 
 });
         container.appendChild(eventBox);
     });
 }
 
 
-
 function getEventsForCurrentUser() {
-    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); // Make sure this key is correct
+    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); 
     console.log('Logged-in User ID:', loggedInUserId);
     if (!loggedInUserId) {
         console.log("No logged-in user found.");
@@ -217,8 +185,6 @@ function getEventsForCurrentUser() {
     console.log('Parsed Events:', events);
     return events;
 }
-
-
 
 
 function deleteEvent(index) {
@@ -239,9 +205,68 @@ function deleteEvent(index) {
             events.splice(index, 1);
             localStorage.setItem(userEventsKey, JSON.stringify(events));
             console.log('After deletion:', events);
-            displayEvents(); // Make sure this function correctly reflects changes
+            displayEvents(); 
         }
     } else {
         console.error('Events not found for user:', loggedInUserId);
     }
 }
+
+
+// const BASE_URL = 'http://127.0.0.1:8000'; 
+
+// async function apiFetch(url, method, data) {
+//     const token = localStorage.getItem('token');
+//     const headers = { 'Content-Type': 'application/json' };
+//     if (token) {
+//         headers['Authorization'] = `Bearer ${token}`;
+//     }
+//     const response = await fetch(`${BASE_URL}${url}`, {
+//         method: method,
+//         headers: headers,
+//         body: data ? JSON.stringify(data) : undefined,
+//     });
+//     if (!response.ok) {
+//         const errorMessage = await response.text();
+//         throw new Error(errorMessage);
+//     }
+//     return response.json();
+// }
+
+
+// async function createEvent(eventData) {
+//     try {
+//         const data = await apiFetch('/event/', 'POST', eventData);
+//         console.log('Event created successfully:', data);
+//         // Refresh or redirect
+//     } catch (error) {
+//         console.error('Failed to create event:', error);
+//         alert('Failed to create event. Please try again.');
+//     }
+// }
+
+
+// async function fetchEventsForUser() {
+//     try {
+//         const events = await apiFetch('/event/', 'GET');
+//         console.log('Fetched events:', events);
+//         return events; // Process or display events
+//     } catch (error) {
+//         console.error('Failed to fetch events:', error);
+//         alert('Failed to fetch events. Please try again.');
+//     }
+// }
+
+
+// async function deleteEvent(eventId) {
+//     try {
+//         const data = await apiFetch(`/event/${eventId}`, 'DELETE');
+//         console.log('Event deleted successfully:', data);
+//         // Refresh or update UI as needed
+//     } catch (error) {
+//         console.error('Failed to delete event:', error);
+//         alert('Failed to delete event. Please try again.');
+//     }
+// }
+
+
