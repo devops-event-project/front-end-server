@@ -12,6 +12,29 @@ function logout() {
     window.location.href = 'index.html';
 }
 
+function getEventsForCurrentUser() {
+    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); // Ensure this is set at login
+    if (!loggedInUserId) {
+        console.log("No logged-in user.");
+        return;
+    }
+
+    // Key to fetch user-specific events from localStorage
+    const userEventsKey = `events_${loggedInUserId}`;
+    const eventsJson = localStorage.getItem(userEventsKey);
+    
+    if (eventsJson) {
+        // This simulates the JSON response you'd get from a backend
+        const userEvents = JSON.parse(eventsJson);
+        console.log(`Events for user ${loggedInUserId}:`, userEvents);
+        return userEvents;
+    } else {
+        console.log(`No events found for user ${loggedInUserId}.`);
+        return [];
+    }
+}
+
+
 let events = [
     {
         attendees: "a@gmail.com",
@@ -145,9 +168,12 @@ function sortEvents(criteria) {
 
 function displayEvents() {
     const container = document.getElementById('eventsContainer');
-    container.innerHTML = ''; 
+    container.innerHTML = ''; // Clear existing content
+
+    const events = getEventsForCurrentUser(); // Assuming this function fetches and logs events correctly
 
     events.forEach((event, index) => {
+        // Correctly define startTime and endTime using the event's startDateTime and endDateTime
         const startTime = new Date(event.startDateTime).toLocaleString('en-GB', {
             day: '2-digit', month: 'short', year: 'numeric', 
             hour: '2-digit', minute: '2-digit', hour12: false
@@ -163,21 +189,59 @@ function displayEvents() {
             <p>Description: ${event.description}</p>
             <p>Time: ${startTime} - ${endTime}</p>
             <p>Location: ${event.location}</p>
-            <button onclick="deleteEvent(${index})" class="delete-btn">Delete</button>
+            <button class="delete-btn">Delete</button>
         `;
+        const deleteButton = eventBox.querySelector('.delete-btn');
+        deleteButton.addEventListener('click', function() {
+        deleteEvent(index); // Ensure 'index' is correct here
+});
         container.appendChild(eventBox);
-    }); // <button onclick="editEvent(${index})" class="edit-btn">Edit</button>
+    });
 }
+
+
+
+function getEventsForCurrentUser() {
+    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); // Make sure this key is correct
+    console.log('Logged-in User ID:', loggedInUserId);
+    if (!loggedInUserId) {
+        console.log("No logged-in user found.");
+        return [];
+    }
+
+    const userEventsKey = `events_${loggedInUserId}`;
+    const eventsJson = localStorage.getItem(userEventsKey);
+    console.log('Retrieved Events JSON:', eventsJson);
+    
+    const events = eventsJson ? JSON.parse(eventsJson) : [];
+    console.log('Parsed Events:', events);
+    return events;
+}
+
+
 
 
 function deleteEvent(index) {
-    if (!confirm("Are you sure you want to delete this event?")) {
+    const loggedInUserId = localStorage.getItem('loggedInUserEmail');
+    if (!loggedInUserId) {
+        console.error('No logged-in user found.');
         return;
     }
-    events.splice(index, 1);
-    localStorage.setItem('events', JSON.stringify(events));
-    
-    displayEvents();
+
+    const userEventsKey = `events_${loggedInUserId}`;
+    const eventsJson = localStorage.getItem(userEventsKey);
+    if (eventsJson) {
+        const events = JSON.parse(eventsJson);
+
+        console.log('Before deletion:', events);
+
+        if (confirm('Are you sure you want to delete this event?')) {
+            events.splice(index, 1);
+            localStorage.setItem(userEventsKey, JSON.stringify(events));
+            console.log('After deletion:', events);
+            displayEvents(); // Make sure this function correctly reflects changes
+        }
+    } else {
+        console.error('Events not found for user:', loggedInUserId);
+    }
 }
-
-
