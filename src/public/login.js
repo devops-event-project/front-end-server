@@ -1,26 +1,25 @@
 
-function handleSignUp() {
-    const email = document.getElementById('signupEmail').value;
-    const password = document.getElementById('signupPassword').value;
+// function handleSignUp() {
+//     const email = document.getElementById('signupEmail').value;
+//     const password = document.getElementById('signupPassword').value;
 
-    const hashedPassword = btoa(password);
+//     const hashedPassword = btoa(password);
 
-    const userData = { email, hashedPassword }; 
+//     const userData = { email, hashedPassword }; 
 
-    localStorage.setItem(email, JSON.stringify(userData));
+//     localStorage.setItem(email, JSON.stringify(userData));
 
-    alert('User signed up successfully!');
-}
+//     alert('User signed up successfully!');
+// }
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    const signupForm = document.getElementById('signupForm');
+// document.addEventListener('DOMContentLoaded', (event) => {
+//     const signupForm = document.getElementById('signupForm');
 
-    signupForm.addEventListener('submit', function(e) {
-        e.preventDefault(); 
-        handleSignUp();
-    });
-});
-
+//     signupForm.addEventListener('submit', function(e) {
+//         e.preventDefault(); 
+//         handleSignUp();
+//     });
+// });
 
 
 function getUserData(email) {
@@ -76,52 +75,58 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
 // const API_BASE_URL = '/user'; 
 
-// async function handleSignUp(email, password) {
-//     const registrationData = {
-//         email: email, 
-//         password: password,
-//     };
+async function handleSignUp(email, password) {
+    const registrationData = {
+        email: email, 
+        username: email,
+        password: password,
+        is_admin: false
+    };
+    console.log(JSON.stringify(registrationData));
+    try {
+        const response = await fetch('http://localhost:8000/user/register', { 
+            method: 'POST',
+        
+            headers: {
+                'accept': 'application/json',
+                
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(registrationData)
+            
+        });
 
-//     try {
-//         const response = await fetch('/user/register', { 
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/json',
-//             },
-//             body: JSON.stringify(registrationData)
-//         });
+        if (!response.ok) {
+            const errorData = await response.json(); 
+            throw new Error(errorData.detail || 'Failed to register');
+        }
 
-//         if (!response.ok) {
-//             const errorData = await response.json(); 
-//             throw new Error(errorData.detail || 'Failed to register');
-//         }
+        const data = await response.json();
+        console.log("Registration successful", data);
 
-//         const data = await response.json();
-//         console.log("Registration successful", data);
-
-//         alert('Signup successful! Please login.');
+        alert('Signup successful! Please login.');
      
-//         return data;
-//     } catch (error) {
-//         console.error('Registration failed:', error);
-//         alert(`Signup failed: ${error.message}`);
+        return data;
+    } catch (error) {
+        console.error('Registration failed:', error);
+        alert(`Signup failed: ${error.message}`);
         
-//     }
-// }
+    }
+}
 
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     const signupForm = document.getElementById('signupForm');
+document.addEventListener('DOMContentLoaded', () => {
+    const signupForm = document.getElementById('signupForm');
 
-//     signupForm.addEventListener('submit', async function(event) {
-//         event.preventDefault(); 
+    signupForm.addEventListener('submit', async function(event) {
+        event.preventDefault(); 
         
-//         const email = document.getElementById('signupEmail').value;
-//         const password = document.getElementById('signupPassword').value;
+        const email = document.getElementById('signupEmail').value;
+        const password = document.getElementById('signupPassword').value;
 
-//         handleSignUp(email, password);
-//     });
-// });
+        handleSignUp(email, password);
+    });
+});
 
 
 // async function handleLogin(email, password) {
