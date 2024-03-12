@@ -171,7 +171,7 @@ function displayEvents(optionalEvents) {
 
 function getEventsForCurrentUser() {
     const loggedInUserId = localStorage.getItem('loggedInUserEmail'); 
-    console.log('Logged-in User ID:', loggedInUserId);
+    // console.log('Logged-in User ID:', loggedInUserId);
     if (!loggedInUserId) {
         console.log("No logged-in user found.");
         return [];

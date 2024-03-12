@@ -40,35 +40,35 @@ function getUserData(email) {
 }
 
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    const loginForm = document.getElementById('loginForm');
-    loginForm.addEventListener('submit', function(event) {
-        event.preventDefault(); 
+// document.addEventListener('DOMContentLoaded', (event) => {
+//     const loginForm = document.getElementById('loginForm');
+//     loginForm.addEventListener('submit', function(event) {
+//         event.preventDefault(); 
 
-        const email = document.getElementById('loginEmail').value;
-        const password = document.getElementById('loginPassword').value;
-        const hashedPassword = btoa(password); // Base64 encode the password
+//         const email = document.getElementById('loginEmail').value;
+//         const password = document.getElementById('loginPassword').value;
+//         const hashedPassword = btoa(password); // Base64 encode the password
         
-        const storedUserDataString = localStorage.getItem(email); 
+//         const storedUserDataString = localStorage.getItem(email); 
 
-        if (storedUserDataString) {
-            const userObject = JSON.parse(storedUserDataString); 
+//         if (storedUserDataString) {
+//             const userObject = JSON.parse(storedUserDataString); 
 
-            const hashedPassword_storage = userObject.hashedPassword;
+//             const hashedPassword_storage = userObject.hashedPassword;
 
-            if (hashedPassword_storage === hashedPassword) {
-                // console.log("Password match. Logging in...");
-                localStorage.setItem('loggedInUserEmail', email); 
-                window.location.href = 'event_page.html'; 
-            } else {
-                // console.log("Password mismatch.");
-                alert('Invalid login credentials.'); 
-            }
-        } else {
-            alert('Invalid login credentials.'); 
-        }
-    });
-});
+//             if (hashedPassword_storage === hashedPassword) {
+//                 // console.log("Password match. Logging in...");
+//                 localStorage.setItem('loggedInUserEmail', email); 
+//                 window.location.href = 'event_page.html'; 
+//             } else {
+//                 // console.log("Password mismatch.");
+//                 alert('Invalid login credentials.'); 
+//             }
+//         } else {
+//             alert('Invalid login credentials.'); 
+//         }
+//     });
+// });
 
 
 
@@ -84,7 +84,7 @@ async function handleSignUp(email, password) {
     };
     console.log(JSON.stringify(registrationData));
     try {
-        const response = await fetch('http://localhost:8000/user/register', { 
+        const response = await fetch('http://0.0.0.0:8080/user/register', { 
             method: 'POST',
         
             headers: {
@@ -129,51 +129,51 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 
-// async function handleLogin(email, password) {
-//     try {
-//         const response = await fetch('/user/login', { 
-//             method: 'POST',
-//             headers: {
-//                 'Content-Type': 'application/x-www-form-urlencoded',
-//             },
-//             body: new URLSearchParams({
-//                 username: email, 
-//                 password: password,
-//             })
-//         });
+async function handleLogin(email, password) {
+    try {
+        const response = await fetch('http://0.0.0.0:8080/user/login', { 
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                username: email, 
+                password: password,
+            })
+        });
 
-//         if (!response.ok) {
-//             throw new Error(`Login failed: ${response.status} ${response.statusText}`);
-//         }
+        if (!response.ok) {
+            throw new Error(`Login failed: ${response.status} ${response.statusText}`);
+        }
 
-//         const data = await response.json();
-//         console.log("Login successful, received token:", data.access_token);
+        const data = await response.json();
+        console.log(data.access_token);
 
-//         localStorage.setItem('token', data.access_token);
-//         localStorage.setItem('loggedInUserEmail', email);
+        localStorage.setItem('token', data.access_token);
+        localStorage.setItem('loggedInUserEmail', email);
 
-//         window.location.href = 'event_page.html';
-//     } catch (error) {
-//         console.error('Login error:', error);
-//         alert('Invalid login credentials.'); 
-//         throw error; 
-//     }
-// }
+        window.location.href = 'event_page.html';
+    } catch (error) {
+        console.error('Login error:', error);
+        alert('Invalid login credentials.'); 
+        throw error; 
+    }
+}
 
 
-// document.addEventListener('DOMContentLoaded', () => {
-//     const loginForm = document.getElementById('loginForm');
-//     loginForm.addEventListener('submit', async function(event) {
-//         event.preventDefault();
+document.addEventListener('DOMContentLoaded', () => {
+    const loginForm = document.getElementById('loginForm');
+    loginForm.addEventListener('submit', async function(event) {
+        event.preventDefault();
 
-//         const email = document.getElementById('loginEmail').value;
-//         const password = document.getElementById('loginPassword').value;
+        const email = document.getElementById('loginEmail').value;
+        const password = document.getElementById('loginPassword').value;
 
-//         try {
-//             await handleLogin(email, password);
-//             // Successful login redirects inside handleLogin
-//         } catch (error) {
-//             // Login failed, error handling is inside handleLogin
-//         }
-//     });
-// });
+        try {
+            await handleLogin(email, password);
+            // Successful login redirects inside handleLogin
+        } catch (error) {
+            // Login failed, error handling is inside handleLogin
+        }
+    });
+});
