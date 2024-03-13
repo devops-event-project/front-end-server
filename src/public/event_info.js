@@ -4,6 +4,42 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 });
 
+// attendees: "Event@gmail.com"
+// description: "Event"
+// endDateTime: "2024-03-14T13:31"
+// location: "Event"
+// reminderType: "email"
+// startDateTime: "2024-03-13T13:31"
+// timeBefore: "20"
+// title: "Event"
+// userId: "a@gmail.com"
+
+function transformEventData(initialData) {
+    // Transform the initial data into the desired format
+    const transformedData = {
+      userID: initialData.userId, // Assuming the initial data has a userID
+      title: initialData.title, // Directly copying title
+      description: initialData.description, // Directly copying description
+      startDateTime: initialData.startDateTime, // Formatting or copying startDateTime
+      endDateTime: initialData.endDateTime, // Formatting or copying endDateTime
+      location: initialData.location, // Directly copying location
+      reminders: initialData.reminders.map(reminder => ({
+        // Assuming the structure of reminders is suitable or adjusting as necessary
+        type: initialData.reminderType,
+        timeBefore: initialData.timeBefore,
+      })),
+      attendees: initialData.attendees.map(attendee => ({
+        // Transforming each attendee and setting attending flag to "True"
+        userID: attendee.userId,
+        attending: "True", // Ensuring the attending flag is always "True"
+      })),
+    };
+    
+
+    console.log("TRANSFORMED DATA ", transformedData);
+    return transformedData;
+  }
+
 
 function logout() {
 
@@ -75,9 +111,16 @@ function submitForm() {
     if (!validateFormData(formObject)) {
         return; 
     }
-    
+
+
+
     const loggedInUserId = localStorage.getItem('loggedInUserEmail'); 
     formObject['userId'] = loggedInUserId;
+
+    console.log("EVENT TO POST ", formObject)
+    const response = createEvent(formObject)
+
+    console.log("RESPONSE here form submission(POST): ", response)
 
     const userEventsKey = `events_${loggedInUserId}`;
     const existingEvents = JSON.parse(localStorage.getItem(userEventsKey)) || [];
@@ -136,12 +179,32 @@ function sortEvents(criteria) {
 }
 
 function displayEvents(optionalEvents) {
+
     // console.log("OPTIONAL EVENTS ", optionalEvents);
     const container = document.getElementById('eventsContainer');
     container.innerHTML = ''; 
 
     const events = optionalEvents || getEventsForCurrentUser(); 
-    // console.log("INSIDE DISPLAY EVENTS FUNCTION ", events);
+    // console.log("(GET)INSIDE DISPLAY EVENTS FUNCTION ", events);
+
+    const events2 = fetchEventsForUser()
+
+    console.log("(GET)EVENTS FROM BACK END", events2);
+
+    // code for displaying the events
+    events2.then(function(result) {
+        console.log(result);
+    
+        console.log(result[0]); 
+    
+        result.forEach(item => {
+            console.log(item); 
+        });
+    }).catch(function(error) {
+        console.error(error);
+    });
+    
+
     events.forEach((event, index) => {
         const startTime = new Date(event.startDateTime).toLocaleString('en-GB', {
             day: '2-digit', month: 'short', year: 'numeric', 
@@ -163,11 +226,11 @@ function displayEvents(optionalEvents) {
         const deleteButton = eventBox.querySelector('.delete-btn');
         deleteButton.addEventListener('click', function() {
         deleteEvent(index); 
+        deleteEventApi
 });
         container.appendChild(eventBox);
     });
 }
-
 
 function getEventsForCurrentUser() {
     const loggedInUserId = localStorage.getItem('loggedInUserEmail'); 
@@ -185,7 +248,6 @@ function getEventsForCurrentUser() {
     // console.log('Parsed Events:', events);
     return events;
 }
-
 
 function deleteEvent(index) {
     const loggedInUserId = localStorage.getItem('loggedInUserEmail');
@@ -231,7 +293,6 @@ function sortEvents(criteria) {
     displayEvents(events); // Pass the sorted events to your display function
 }
 
-
 function populateLocationDropdown() {
     const locationFilter = document.getElementById('locationFilter');
     const events = getEventsForCurrentUser();
@@ -263,62 +324,116 @@ document.getElementById('applyLocationFilter').addEventListener('click', () => {
 });
 
 
+// const response = await fetch('http://0.0.0.0:8080/user/register', { 
+//     method: 'POST',
 
-// const BASE_URL = 'http://127.0.0.1:8000'; 
+    // headers: {
+    //     'accept': 'application/json',
+        
+    //     'Content-Type': 'application/json',
+    // },
+//     body: JSON.stringify(registrationData)
+    
+// });
 
-// async function apiFetch(url, method, data) {
-//     const token = localStorage.getItem('token');
-//     const headers = { 'Content-Type': 'application/json' };
-//     if (token) {
-//         headers['Authorization'] = `Bearer ${token}`;
-//     }
-//     const response = await fetch(`${BASE_URL}${url}`, {
-//         method: method,
-//         headers: headers,
-//         body: data ? JSON.stringify(data) : undefined,
-//     });
-//     if (!response.ok) {
-//         const errorMessage = await response.text();
-//         throw new Error(errorMessage);
-//     }
-//     return response.json();
-// }
+const BASE_URL = 'http://0.0.0.0:8081'; 
 
 
-// async function createEvent(eventData) {
-//     try {
-//         const data = await apiFetch('/event/', 'POST', eventData);
-//         console.log('Event created successfully:', data);
-//         // Refresh or redirect
+
+
+async function createEvent(eventData) {
+    try {
+        const data = await apiFetch('http://0.0.0.0:8081/event/', 'POST', eventData);
+        console.log('Event created successfully:', data);
+        // Refresh or redirect
             // TODO - response with message codes 200, 404, 500
-//     } catch (error) {
-//         console.error('Failed to create event:', error);
-//         alert('Failed to create event. Please try again.');
-//     }
-// }
+    } catch (error) {
+        console.error('Failed to create event:', error);
+        alert('Failed to create event. Please try again.');
+    }
+}
 
 
-// async function fetchEventsForUser() {
-//     try {
-//         const events = await apiFetch('/event/', 'GET');
-//         console.log('Fetched events:', events);
-//         return events; // Process or display events
-//     } catch (error) {
-//         console.error('Failed to fetch events:', error);
-//         alert('Failed to fetch events. Please try again.');
-//     }
-// }
+async function apiFetchPost(url, method, data) {
+    const token = localStorage.getItem('token');
+    const transformedData = transformEventData(data)
+    const headers = {
+        'Accept': 'application/json',
+        // Uncomment and adjust the Content-Type header as necessary for your request
+        'Content-Type': 'application/json',
+    };
+
+    // Uncomment this if you need to send the Authorization token
+    // if (token) {
+    //     headers['Authorization'] = `Bearer ${token}`;
+    // }
+
+    // Prepare the init object for fetch
+    const init = {
+        method: method, // This sets the HTTP method
+        headers: headers,
+        // Uncomment and use body if you need to send data with the request
+        body: data ? JSON.stringify(transformedData) : undefined,
+    };
+
+    const response = await fetch(url, init); // Use the init object here
+    if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage);
+    }
+    return response.json();
+}
+
+async function apiFetch(url, method, data) {
+    const token = localStorage.getItem('token');
+    const headers = {
+        'Accept': 'application/json',
+        // Uncomment and adjust the Content-Type header as necessary for your request
+        'Content-Type': 'application/json',
+    };
+
+    // Uncomment this if you need to send the Authorization token
+    // if (token) {
+    //     headers['Authorization'] = `Bearer ${token}`;
+    // }
+
+    // Prepare the init object for fetch
+    const init = {
+        method: method, // This sets the HTTP method
+        headers: headers,
+        // Uncomment and use body if you need to send data with the request
+        // body: data ? JSON.stringify(data) : undefined,
+    };
+
+    const response = await fetch(url, init); // Use the init object here
+    if (!response.ok) {
+        const errorMessage = await response.text();
+        throw new Error(errorMessage);
+    }
+    return response.json();
+}
+
+async function fetchEventsForUser() {
+    try {
+        const events = await apiFetch('http://0.0.0.0:8081/event/', 'GET');
+        // console.log('Fetched events:', events);
+        return events; // Process or display events
+    } catch (error) {
+        console.error('Failed to fetch events:', error);
+        alert('Failed to fetch events. Please try again.');
+    }
+}
 
 
-// async function deleteEvent(eventId) {
-//     try {
-//         const data = await apiFetch(`/event/${eventId}`, 'DELETE');
-//         console.log('Event deleted successfully:', data);
-//         // Refresh or update UI as needed
-//     } catch (error) {
-//         console.error('Failed to delete event:', error);
-//         alert('Failed to delete event. Please try again.');
-//     }
-// }
+async function deleteEventApi(eventId) {
+    try {
+        const data = await apiFetch(`/event/${eventId}`, 'DELETE');
+        console.log('Event deleted successfully:', data);
+        // Refresh or update UI as needed
+    } catch (error) {
+        console.error('Failed to delete event:', error);
+        alert('Failed to delete event. Please try again.');
+    }
+}
 
 
