@@ -11,23 +11,18 @@
 
     <div class="container">
         <div class="left-container">
-            <!-- Left-side content: Sorting Buttons and Event List -->
             <div class="sorting-buttons">
                 <button onclick="sortEvents('time')">Sort by Time</button>
                 <button onclick="sortEvents('location')">Sort by Location</button>
-                
-               
-
+                <div class="date-filter-row">
+                    <input type="date" id="dateFilter" name="dateFilter" class="date-input">
+                    <button onclick="filterEventsByDate()">Filter by Date</button>
+                </div>
             </div>
-            <!-- <label for="locationFilter">Filter by Location:</label>
-            <select id="locationFilter">
-                <option value="all">All Locations</option>
-            </select>
-            <button id="applyLocationFilter">Apply Filter</button> -->
-            <div id="eventsContainer"></div> <!-- Events will be displayed here -->
+       
+            <div id="eventsContainer"></div> 
         </div>
         <div class="right-container">
-            <!-- Right-side content: Form -->
             <h2>Create Event</h2>
             <form id="calendarForm">
                 <label for="title">Title:</label>
