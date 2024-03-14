@@ -185,63 +185,134 @@ function sortEvents(criteria) {
     displayEvents(); 
 }
 
-function displayEvents(optionalEvents) {
-    // we deleted index
-    // console.log("OPTIONAL EVENTS ", optionalEvents);
-    const token = localStorage.getItem('token');
-    console.log("FUCKING TOKEN ", token);
+// function displayEvents(optionalEvents) {
+//     // we deleted index
+//     // console.log("OPTIONAL EVENTS ", optionalEvents);
+//     const token = localStorage.getItem('token');
+//     console.log("FUCKING TOKEN ", token);
+//     const container = document.getElementById('eventsContainer');
+//     container.innerHTML = ''; 
+
+//     const events = optionalEvents || getEventsForCurrentUser(); 
+//     // console.log("(GET)INSIDE DISPLAY EVENTS FUNCTION ", events);
+
+//     const events2 = fetchEventsForUser()
+
+//     console.log("(GET)EVENTS FROM BACK END", events2);
+
+//     // code for displaying the events
+//     events2.then(function(result) {
+//         console.log(result);
+    
+//         console.log(result[0]); 
+    
+//         result.forEach(item => {
+//             console.log(item); 
+//         });
+//     }).catch(function(error) {
+//         console.error(error);
+//     });
+    
+
+//     events.forEach((event, index) => {
+//         const startTime = new Date(event.startDateTime).toLocaleString('en-GB', {
+//             day: '2-digit', month: 'short', year: 'numeric', 
+//             hour: '2-digit', minute: '2-digit', hour12: false
+//         });
+//         const endTime = new Date(event.endDateTime).toLocaleString('en-GB', {
+//             hour: '2-digit', minute: '2-digit', hour12: false
+//         });
+
+//         const eventBox = document.createElement('div');
+//         eventBox.className = 'eventBox';
+//         eventBox.innerHTML = `
+//             <h2>Event ${index + 1}: ${event.title}</h2>
+//             <p>Description: ${event.description}</p>
+//             <p>Time: ${startTime} - ${endTime}</p>
+//             <p>Location: ${event.location}</p>
+//             <button class="delete-btn">Delete</button>
+//         `;
+//         index = 0
+//         const deleteButton = eventBox.querySelector('.delete-btn');
+//         deleteButton.addEventListener('click', function() {
+//         deleteEvent(index); 
+//         deleteEventApi(eventId);
+//         console.log("(DELETE) delete event", eventId);
+// });
+//         container.appendChild(eventBox);
+//     });
+// }
+
+
+function displayEvents() {
     const container = document.getElementById('eventsContainer');
-    container.innerHTML = ''; 
+    container.innerHTML = ''; // Clear existing content
 
-    const events = optionalEvents || getEventsForCurrentUser(); 
-    // console.log("(GET)INSIDE DISPLAY EVENTS FUNCTION ", events);
+    fetchEventsForUser().then(events => {
+        console.log("(GET)EVENTS FROM BACK END", events);
 
-    const events2 = fetchEventsForUser()
+        events.forEach((event, index) => {
+            const startTime = new Date(event.startDateTime).toLocaleString('en-GB', {
+                day: '2-digit', month: 'short', year: 'numeric',
+                hour: '2-digit', minute: '2-digit', hour12: false
+            });
+            const endTime = new Date(event.endDateTime).toLocaleString('en-GB', {
+                hour: '2-digit', minute: '2-digit', hour12: false
+            });
 
-    console.log("(GET)EVENTS FROM BACK END", events2);
+            const attendeesInfo = event.attendees.map(a => `
+                <div class="attendee-info">${a.userID} <span class="attendance-indicator" style="background-color: ${a.attending === "True" ? 'green' : 'red'};"></span></div>
+            `).join('');
 
-    // code for displaying the events
-    events2.then(function(result) {
-        console.log(result);
-    
-        console.log(result[0]); 
-    
-        result.forEach(item => {
-            console.log(item); 
+            const eventBox = document.createElement('div');
+            eventBox.className = 'eventBox';
+            eventBox.innerHTML = `
+                <h2>Event ${index + 1}: ${event.title}</h2>
+                <p>Description: ${event.description}</p>
+                <p>Time: ${startTime} - ${endTime}</p>
+                <p>Location: ${event.location}</p>
+                <p>Reminder: 20 minutes before</p>
+                <div>Attendees: ${attendeesInfo}</div>
+                <button class="delete-btn" data-event-id="${event.id}">Delete</button>
+            `;
+
+            const deleteButton = eventBox.querySelector('.delete-btn');
+            deleteButton.addEventListener('click', function() {
+                const eventId = this.getAttribute('data-event-id');
+                deleteEvent(eventId);
+                console.log("(DELETE) delete event", eventId);
+            });
+
+            container.appendChild(eventBox);
         });
+
+        if (!document.getElementById('event-style')) {
+            const style = document.createElement('style');
+            style.id = 'event-style';
+            style.innerHTML = `
+                .eventBox {
+                    color: #333; /* Sets the text color for everything in an event box */
+                }
+                .attendance-indicator {
+                    display: inline-block;
+                    width: 10px;
+                    height: 10px;
+                    margin-left: 5px;
+                    border-radius: 50%;
+                    vertical-align: middle;
+                }
+                .attendee-info {
+                    color: #333; /* Specifically ensures text color for attendees, if needed */
+                }
+            `;
+            document.head.appendChild(style);
+        }
     }).catch(function(error) {
         console.error(error);
     });
-    
-
-    events.forEach((event, index) => {
-        const startTime = new Date(event.startDateTime).toLocaleString('en-GB', {
-            day: '2-digit', month: 'short', year: 'numeric', 
-            hour: '2-digit', minute: '2-digit', hour12: false
-        });
-        const endTime = new Date(event.endDateTime).toLocaleString('en-GB', {
-            hour: '2-digit', minute: '2-digit', hour12: false
-        });
-
-        const eventBox = document.createElement('div');
-        eventBox.className = 'eventBox';
-        eventBox.innerHTML = `
-            <h2>Event ${index + 1}: ${event.title}</h2>
-            <p>Description: ${event.description}</p>
-            <p>Time: ${startTime} - ${endTime}</p>
-            <p>Location: ${event.location}</p>
-            <button class="delete-btn">Delete</button>
-        `;
-        index = 0
-        const deleteButton = eventBox.querySelector('.delete-btn');
-        deleteButton.addEventListener('click', function() {
-        deleteEvent(index); 
-        deleteEventApi(eventId);
-        console.log("(DELETE) delete event", eventId);
-});
-        container.appendChild(eventBox);
-    });
 }
+
+
 
 function getEventsForCurrentUser() {
     const loggedInUserId = localStorage.getItem('loggedInUserEmail'); 
@@ -349,7 +420,6 @@ document.getElementById('applyLocationFilter').addEventListener('click', () => {
 // });
 
 const BASE_URL = 'http://0.0.0.0:8081'; 
-
 
 
 
