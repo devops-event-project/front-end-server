@@ -1,4 +1,4 @@
-const EVENT_BASE_URL = 'http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event/'; 
+const EVENT_BASE_URL = 'http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event'; 
 
 document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('calendarForm').addEventListener('submit', function(e) {
@@ -284,7 +284,7 @@ function populateLocationDropdown() {
     });
 
 }
-
+event/
 document.getElementById('applyLocationFilter').addEventListener('click', () => {
     const selectedLocation = document.getElementById('locationFilter').value;
     let filteredEvents = getEventsForCurrentUser();
@@ -298,7 +298,7 @@ document.getElementById('applyLocationFilter').addEventListener('click', () => {
 
 async function createEvent(eventData) {
     try {
-        const data = await apiFetch(EVENT_BASE_URL, 'POST', eventData);
+        const data = await apiFetch(EVENT_BASE_URL + 'create', 'POST', eventData);
         console.log('Event created successfully:', data);
 
     } catch (error) {
@@ -368,7 +368,7 @@ async function fetchEventsForUser() {
 
 async function deleteEvent(eventId) {
     try {
-        const response = await fetch(EVENT_BASE_URL + `${eventId}`, {
+        const response = await fetch(EVENT_BASE_URL + `/${eventId}`, {
             method: 'DELETE',
             headers: {
                 // 'Authorization': `Bearer ${localStorage.getItem('token')}`, 
