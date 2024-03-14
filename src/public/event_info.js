@@ -1,3 +1,5 @@
+const EVENT_BASE_URL = 'http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event'; 
+
 document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('calendarForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -323,8 +325,6 @@ document.getElementById('applyLocationFilter').addEventListener('click', () => {
     displayEvents(filteredEvents); 
 });
 
-const EVENT_BASE_URL = 'http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event/'; 
-
 async function createEvent(eventData) {
     try {
         const data = await apiFetch(EVENT_BASE_URL, 'POST', eventData);
@@ -399,7 +399,7 @@ async function apiFetch(url, method, data) {
 
 async function fetchEventsForUser() {
     try {
-        const events = await apiFetch('http://:8081/event/', 'GET');
+        const events = await apiFetch('http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event', 'GET');
         // console.log('Fetched events:', events);
         return events; // Process or display events
     } catch (error) {
@@ -411,7 +411,7 @@ async function fetchEventsForUser() {
 
 async function deleteEventApi(eventId) {
     try {
-        const data = await apiFetch(`/event/${eventId}`, 'DELETE');
+        const data = await apiFetch(EVENT_BASE_URL + `/${eventId}`, 'DELETE');
         console.log('Event deleted successfully:', data);
         // Refresh or update UI as needed
     } catch (error) {
