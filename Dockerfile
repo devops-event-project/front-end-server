@@ -1,9 +1,9 @@
 FROM node:14-alpine
-RUN mkdir -p /front-end-server/src
-WORKDIR /front-end-server/src
+RUN mkdir -p /front-end-server
+WORKDIR /front-end-server
 
 RUN npm install
-COPY . /front-end-server/src
+COPY . /front-end-server
 EXPOSE 3000
 
-CMD ["node", "server.js"]
+CMD ["node", "src/server.js"]
