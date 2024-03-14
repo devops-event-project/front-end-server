@@ -1,3 +1,5 @@
+const EVENT_BASE_URL = 'http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event/'; 
+
 document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('calendarForm').addEventListener('submit', function(e) {
         e.preventDefault();
@@ -294,11 +296,9 @@ document.getElementById('applyLocationFilter').addEventListener('click', () => {
     displayEvents(filteredEvents); 
 });
 
-const BASE_URL = 'http://0.0.0.0:8081'; 
-
 async function createEvent(eventData) {
     try {
-        const data = await apiFetch('http://0.0.0.0:8081/event/', 'POST', eventData);
+        const data = await apiFetch(EVENT_BASE_URL, 'POST', eventData);
         console.log('Event created successfully:', data);
 
     } catch (error) {
@@ -340,7 +340,7 @@ async function fetchEventsForUser() {
         const token = localStorage.getItem('token'); 
         console.log("FUCKING TOKEN ", token);
 
-        let url = 'http://0.0.0.0:8081/event/';
+        let url = 'http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event/';
 
         if (token) {
             url += `?access_token=${encodeURIComponent(token)}`;
@@ -368,7 +368,7 @@ async function fetchEventsForUser() {
 
 async function deleteEvent(eventId) {
     try {
-        const response = await fetch(`http://0.0.0.0:8081/event/${eventId}`, {
+        const response = await fetch(EVENT_BASE_URL + `${eventId}`, {
             method: 'DELETE',
             headers: {
                 // 'Authorization': `Bearer ${localStorage.getItem('token')}`, 
