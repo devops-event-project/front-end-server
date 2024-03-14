@@ -147,6 +147,7 @@ async function handleLogin(email, password) {
         }
 
         const data = await response.json();
+        console.log("ACCESS TOKEN, HERE WE ARE");
         console.log(data.access_token);
 
         localStorage.setItem('token', data.access_token);

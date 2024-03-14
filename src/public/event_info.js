@@ -15,30 +15,37 @@ document.addEventListener('DOMContentLoaded', (event) => {
 // userId: "a@gmail.com"
 
 function transformEventData(initialData) {
-    // Transform the initial data into the desired format
-    const transformedData = {
-      userID: initialData.userId, // Assuming the initial data has a userID
-      title: initialData.title, // Directly copying title
-      description: initialData.description, // Directly copying description
-      startDateTime: initialData.startDateTime, // Formatting or copying startDateTime
-      endDateTime: initialData.endDateTime, // Formatting or copying endDateTime
-      location: initialData.location, // Directly copying location
-      reminders: initialData.reminders.map(reminder => ({
-        // Assuming the structure of reminders is suitable or adjusting as necessary
-        type: initialData.reminderType,
-        timeBefore: initialData.timeBefore,
-      })),
-      attendees: initialData.attendees.map(attendee => ({
-        // Transforming each attendee and setting attending flag to "True"
-        userID: attendee.userId,
-        attending: "True", // Ensuring the attending flag is always "True"
-      })),
-    };
+    console.log("INITIAL DATA ", initialData);
     
+    // Split the attendees string into an array of email addresses
+    const attendeesArray = initialData.attendees.split(',').map(email => email.trim());
+
+    // Manually creating a reminders array since initialData does not have one,
+    // but we assume each event only has one reminder based on your description
+    const remindersArray = [{
+        type: initialData.reminderType,
+        timeBefore: parseInt(initialData.timeBefore, 10) // Ensure this is a number
+    }];
+
+    const transformedData = {
+        userID: initialData.userId,
+        title: initialData.title,
+        description: initialData.description,
+        startDateTime: initialData.startDateTime,
+        endDateTime: initialData.endDateTime,
+        location: initialData.location,
+        reminders: remindersArray, // Using the manually created array
+        attendees: attendeesArray.map(attendeeEmail => ({
+            // Map each email address to the expected object structure
+            userID: attendeeEmail,
+            attending: "True", // Assuming all provided attendees are attending
+        })),
+    };
 
     console.log("TRANSFORMED DATA ", transformedData);
     return transformedData;
-  }
+}
+
 
 
 function logout() {
@@ -118,7 +125,7 @@ function submitForm() {
     formObject['userId'] = loggedInUserId;
 
     console.log("EVENT TO POST ", formObject)
-    const response = createEvent(formObject)
+    const response = apiFetchPost(formObject)
 
     console.log("RESPONSE here form submission(POST): ", response)
 
@@ -179,8 +186,10 @@ function sortEvents(criteria) {
 }
 
 function displayEvents(optionalEvents) {
-
+    // we deleted index
     // console.log("OPTIONAL EVENTS ", optionalEvents);
+    const token = localStorage.getItem('token');
+    console.log("FUCKING TOKEN ", token);
     const container = document.getElementById('eventsContainer');
     container.innerHTML = ''; 
 
@@ -223,10 +232,12 @@ function displayEvents(optionalEvents) {
             <p>Location: ${event.location}</p>
             <button class="delete-btn">Delete</button>
         `;
+        index = 0
         const deleteButton = eventBox.querySelector('.delete-btn');
         deleteButton.addEventListener('click', function() {
         deleteEvent(index); 
-        deleteEventApi
+        deleteEventApi(eventId);
+        console.log("(DELETE) delete event", eventId);
 });
         container.appendChild(eventBox);
     });
@@ -272,6 +283,7 @@ function deleteEvent(index) {
 }
 
 function sortEvents(criteria) {
+
     let events = getEventsForCurrentUser(); 
     console.log('Displaying events before sorting FUNC:', events); // Debug log
 
@@ -354,7 +366,8 @@ async function createEvent(eventData) {
 }
 
 
-async function apiFetchPost(url, method, data) {
+async function apiFetchPost(data) {
+    let url = 'http://0.0.0.0:8081/event/';
     const token = localStorage.getItem('token');
     const transformedData = transformEventData(data)
     const headers = {
@@ -370,7 +383,7 @@ async function apiFetchPost(url, method, data) {
 
     // Prepare the init object for fetch
     const init = {
-        method: method, // This sets the HTTP method
+        method: 'POST', // This sets the HTTP method
         headers: headers,
         // Uncomment and use body if you need to send data with the request
         body: data ? JSON.stringify(transformedData) : undefined,
@@ -381,59 +394,71 @@ async function apiFetchPost(url, method, data) {
         const errorMessage = await response.text();
         throw new Error(errorMessage);
     }
-    return response.json();
-}
-
-async function apiFetch(url, method, data) {
-    const token = localStorage.getItem('token');
-    const headers = {
-        'Accept': 'application/json',
-        // Uncomment and adjust the Content-Type header as necessary for your request
-        'Content-Type': 'application/json',
-    };
-
-    // Uncomment this if you need to send the Authorization token
-    // if (token) {
-    //     headers['Authorization'] = `Bearer ${token}`;
-    // }
-
-    // Prepare the init object for fetch
-    const init = {
-        method: method, // This sets the HTTP method
-        headers: headers,
-        // Uncomment and use body if you need to send data with the request
-        // body: data ? JSON.stringify(data) : undefined,
-    };
-
-    const response = await fetch(url, init); // Use the init object here
-    if (!response.ok) {
-        const errorMessage = await response.text();
-        throw new Error(errorMessage);
+    else{
+        console.log("POST WAS SUCCESFUL!!!!!")
     }
     return response.json();
 }
+
+// async function apiFetchGet(url, method, data) {
+//     const token = localStorage.getItem('token');
+//     const headers = {
+//         'Accept': 'application/json',
+//         // Uncomment and adjust the Content-Type header as necessary for your request
+//         'Content-Type': 'application/json',
+        
+//     };
+
+//     // Uncomment this if you need to send the Authorization token
+//     if (token) {
+//         headers['Authorization'] = `Bearer ${token}`;
+//     }
+
+//     // Prepare the init object for fetch
+//     const init = {
+//         method: method, // This sets the HTTP method
+//         headers: headers,
+//         // Uncomment and use body if you need to send data with the request
+//         // body: data ? JSON.stringify(data) : undefined,
+//     };
+
+//     const response = await fetch(url, init); // Use the init object here
+//     if (!response.ok) {
+//         const errorMessage = await response.text();
+//         throw new Error(errorMessage);
+//     }
+//     return response.json();
+// }
+
+
 
 async function fetchEventsForUser() {
     try {
-        const events = await apiFetch('http://0.0.0.0:8081/event/', 'GET');
-        // console.log('Fetched events:', events);
-        return events; // Process or display events
+        const token = localStorage.getItem('token'); // Assuming the token is stored in localStorage
+        let url = 'http://0.0.0.0:8081/event/'; // Your original API endpoint
+
+        // Append the access_token as a query parameter if it exists
+        if (token) {
+            url += `?access_token=${encodeURIComponent(token)}`;
+        }
+
+        const response = await fetch(url, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+            },
+        });
+
+        if (!response.ok) {
+            const errorMessage = await response.text();
+            throw new Error(errorMessage);
+        }
+
+        return await response.json();
     } catch (error) {
         console.error('Failed to fetch events:', error);
-        alert('Failed to fetch events. Please try again.');
+        throw error; // Rethrow or handle as needed
     }
 }
-
-
-async function deleteEventApi(eventId) {
-    try {
-        const data = await apiFetch(`/event/${eventId}`, 'DELETE');
-        console.log('Event deleted successfully:', data);
-        // Refresh or update UI as needed
-    } catch (error) {
-        console.error('Failed to delete event:', error);
-        alert('Failed to delete event. Please try again.');
-    }
-}
-
 
