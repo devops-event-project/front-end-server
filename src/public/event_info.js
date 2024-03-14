@@ -323,27 +323,11 @@ document.getElementById('applyLocationFilter').addEventListener('click', () => {
     displayEvents(filteredEvents); 
 });
 
-
-// const response = await fetch('http://0.0.0.0:8080/user/register', { 
-//     method: 'POST',
-
-    // headers: {
-    //     'accept': 'application/json',
-        
-    //     'Content-Type': 'application/json',
-    // },
-//     body: JSON.stringify(registrationData)
-    
-// });
-
-const EVENT_BASE_URL = ''; 
-
-
-
+const EVENT_BASE_URL = 'http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event/'; 
 
 async function createEvent(eventData) {
     try {
-        const data = await apiFetch('http://0.0.0.0:8081/event/', 'POST', eventData);
+        const data = await apiFetch(EVENT_BASE_URL, 'POST', eventData);
         console.log('Event created successfully:', data);
         // Refresh or redirect
             // TODO - response with message codes 200, 404, 500
@@ -415,7 +399,7 @@ async function apiFetch(url, method, data) {
 
 async function fetchEventsForUser() {
     try {
-        const events = await apiFetch('http://0.0.0.0:8081/event/', 'GET');
+        const events = await apiFetch('http://:8081/event/', 'GET');
         // console.log('Fetched events:', events);
         return events; // Process or display events
     } catch (error) {

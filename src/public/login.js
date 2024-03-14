@@ -71,7 +71,7 @@ function getUserData(email) {
 // });
 
 
-const USER_BASE_URL = 'http://ec2-3-71-92-237.eu-central-1.compute.amazonaws.com/user'; 
+const USER_BASE_URL = 'http://ec2-3-127-107-64.eu-central-1.compute.amazonaws.com/user'; 
 
 async function handleSignUp(email, password) {
     const registrationData = {
