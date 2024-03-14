@@ -1,4 +1,5 @@
 const EVENT_BASE_URL = 'http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event'; 
+// const EVENT_BASE_URL = 'http://0.0.0.0:8081/event'; 
 
 document.addEventListener('DOMContentLoaded', (event) => {
     document.getElementById('calendarForm').addEventListener('submit', function(e) {
@@ -296,19 +297,8 @@ document.getElementById('applyLocationFilter').addEventListener('click', () => {
     displayEvents(filteredEvents); 
 });
 
-async function createEvent(eventData) {
-    try {
-        const data = await apiFetch(EVENT_BASE_URL + '/create', 'POST', eventData);
-        console.log('Event created successfully:', data);
-
-    } catch (error) {
-        console.error('Failed to create event:', error);
-        alert('Failed to create event. Please try again.');
-    }
-}
-
 async function apiFetchPost(data) {
-    let url = EVENT_BASE_URL;
+    let url = EVENT_BASE_URL + '/create';
     const token = localStorage.getItem('token');
     const transformedData = transformEventData(data)
     const headers = {
@@ -329,7 +319,7 @@ async function apiFetchPost(data) {
     }
     else{
         console.log("POST WAS SUCCESFUL!!!!!")
-        displayEvents();
+        // displayEvents();
     }
 
     return response.json();
@@ -340,7 +330,8 @@ async function fetchEventsForUser() {
         const token = localStorage.getItem('token'); 
         console.log("FUCKING TOKEN ", token);
 
-        let url = 'http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event/';
+        // let url = 'http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event/';
+        let url = EVENT_BASE_URL;
 
         if (token) {
             url += `?access_token=${encodeURIComponent(token)}`;

@@ -1,26 +1,5 @@
-
-// function handleSignUp() {
-//     const email = document.getElementById('signupEmail').value;
-//     const password = document.getElementById('signupPassword').value;
-
-//     const hashedPassword = btoa(password);
-
-//     const userData = { email, hashedPassword }; 
-
-//     localStorage.setItem(email, JSON.stringify(userData));
-
-//     alert('User signed up successfully!');
-// }
-
-// document.addEventListener('DOMContentLoaded', (event) => {
-//     const signupForm = document.getElementById('signupForm');
-
-//     signupForm.addEventListener('submit', function(e) {
-//         e.preventDefault(); 
-//         handleSignUp();
-//     });
-// });
-
+const USER_BASE_URL = 'http://ec2-3-127-107-64.eu-central-1.compute.amazonaws.com/user'; 
+// const USER_BASE_URL = 'http://0.0.0.0:8080/user'; 
 
 function getUserData(email) {
     if (!email) {
@@ -38,40 +17,6 @@ function getUserData(email) {
         console.log("No user is currently logged in or specified.");
     }
 }
-
-
-// document.addEventListener('DOMContentLoaded', (event) => {
-//     const loginForm = document.getElementById('loginForm');
-//     loginForm.addEventListener('submit', function(event) {
-//         event.preventDefault(); 
-
-//         const email = document.getElementById('loginEmail').value;
-//         const password = document.getElementById('loginPassword').value;
-//         const hashedPassword = btoa(password); // Base64 encode the password
-        
-//         const storedUserDataString = localStorage.getItem(email); 
-
-//         if (storedUserDataString) {
-//             const userObject = JSON.parse(storedUserDataString); 
-
-//             const hashedPassword_storage = userObject.hashedPassword;
-
-//             if (hashedPassword_storage === hashedPassword) {
-//                 // console.log("Password match. Logging in...");
-//                 localStorage.setItem('loggedInUserEmail', email); 
-//                 window.location.href = 'event_page.html'; 
-//             } else {
-//                 // console.log("Password mismatch.");
-//                 alert('Invalid login credentials.'); 
-//             }
-//         } else {
-//             alert('Invalid login credentials.'); 
-//         }
-//     });
-// });
-
-
-const USER_BASE_URL = 'http://ec2-3-127-107-64.eu-central-1.compute.amazonaws.com/user'; 
 
 async function handleSignUp(email, password) {
     const registrationData = {
