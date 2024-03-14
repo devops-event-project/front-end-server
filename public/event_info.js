@@ -298,7 +298,7 @@ document.getElementById('applyLocationFilter').addEventListener('click', () => {
 
 async function createEvent(eventData) {
     try {
-        const data = await apiFetch(EVENT_BASE_URL + 'create', 'POST', eventData);
+        const data = await apiFetch(EVENT_BASE_URL + '/create', 'POST', eventData);
         console.log('Event created successfully:', data);
 
     } catch (error) {
