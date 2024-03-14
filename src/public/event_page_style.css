@@ -122,7 +122,6 @@ button:hover {
 
 }
 
-
 .right-container {
     display: flex;
     flex-direction: column;
@@ -132,13 +131,13 @@ button:hover {
 }
 
 .sorting-buttons {
-    padding: 20px 35px; 
-    font-size: 2rem; 
+    padding: 20px 35px;
+    font-size: 2rem;
     cursor: pointer;
-    min-width: 100px; 
-    display: flex; 
-    justify-content: center; 
-    gap: 10px; 
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap; 
+    gap: 10px;
 }
 
 .sorting-buttons button {
@@ -150,7 +149,6 @@ button:hover {
     min-width: 50px; 
 
 }
-
 
 #logoutButton {
     position: fixed; 
@@ -169,11 +167,8 @@ button:hover {
     min-width: 50px; 
 }
 
-
-/**/
-
 .eventBox {
-    color: #333; /* Sets the text color for everything in an event box */
+    color: #333; 
 }
 .attendance-indicator {
     display: inline-block;
@@ -184,10 +179,23 @@ button:hover {
     vertical-align: middle;
 }
 .attendee-info {
-    color: #333; /* Specifically ensures text color for attendees, if needed */
+    color: #333; 
 }
 
 .date-filter {
-    margin-top: 10px; /* Adds space above the date filter */
-    text-align: left; /* Aligns the content to the left, if needed */
+    margin-top: 10px; 
+    text-align: left; 
+}
+
+.date-filter-row input[type="date"] {
+    flex-grow: 0; 
+    flex-shrink: 1; 
+    flex-basis: auto; 
+    max-width: 200px; 
+
+}
+
+.date-input {
+    width: auto; 
+    max-width: 200px; 
 }
