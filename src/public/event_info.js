@@ -308,7 +308,7 @@ async function createEvent(eventData) {
 }
 
 async function apiFetchPost(data) {
-    let url = 'http://0.0.0.0:8081/event/';
+    let url = EVENT_BASE_URL;
     const token = localStorage.getItem('token');
     const transformedData = transformEventData(data)
     const headers = {
