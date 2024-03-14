@@ -168,3 +168,26 @@ button:hover {
     width: auto; 
     min-width: 50px; 
 }
+
+
+/**/
+
+.eventBox {
+    color: #333; /* Sets the text color for everything in an event box */
+}
+.attendance-indicator {
+    display: inline-block;
+    width: 10px;
+    height: 10px;
+    margin-left: 5px;
+    border-radius: 50%;
+    vertical-align: middle;
+}
+.attendee-info {
+    color: #333; /* Specifically ensures text color for attendees, if needed */
+}
+
+.date-filter {
+    margin-top: 10px; /* Adds space above the date filter */
+    text-align: left; /* Aligns the content to the left, if needed */
+}
