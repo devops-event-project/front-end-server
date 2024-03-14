@@ -336,7 +336,7 @@ document.getElementById('applyLocationFilter').addEventListener('click', () => {
     
 // });
 
-const BASE_URL = 'http://0.0.0.0:8081'; 
+const EVENT_BASE_URL = ''; 
 
 
 

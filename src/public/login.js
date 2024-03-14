@@ -71,9 +71,7 @@ function getUserData(email) {
 // });
 
 
-
-
-// const API_BASE_URL = '/user'; 
+const USER_BASE_URL = 'http://ec2-3-71-92-237.eu-central-1.compute.amazonaws.com/user'; 
 
 async function handleSignUp(email, password) {
     const registrationData = {
@@ -84,7 +82,7 @@ async function handleSignUp(email, password) {
     };
     console.log(JSON.stringify(registrationData));
     try {
-        const response = await fetch('http://0.0.0.0:8080/user/register', { 
+        const response = await fetch(USER_BASE_URL + '/register', { 
             method: 'POST',
         
             headers: {
@@ -131,7 +129,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function handleLogin(email, password) {
     try {
-        const response = await fetch('http://0.0.0.0:8080/user/login', { 
+        const response = await fetch(USER_BASE_URL + '/login', { 
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
