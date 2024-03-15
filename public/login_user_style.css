@@ -1,3 +1,12 @@
+/*
+This CSS snippet defines the styling for a login and sign-up form interface. It sets up a container 
+to align these forms side by side with equal spacing, employing flexbox for a responsive layout. 
+Each form is given a clean, modern look with white backgrounds, slight shadows for depth, and rounded 
+corners. Text inputs and buttons are styled for clarity and interactivity, with hover effects on 
+buttons for visual feedback. The design focuses on creating an intuitive and aesthetically pleasing 
+user experience, ensuring that form elements are easily identifiable and accessible.
+*/
+
 .auth-container {
     display: flex;
     justify-content: space-around;

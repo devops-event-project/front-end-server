@@ -1,12 +1,46 @@
+/**
+ * Event Management Frontend Script for Microservice Architecture
+ * 
+ * This script is an integral part of the frontend for an Event Management System
+ * designed to operate within a microservice architecture. It facilitates interaction
+ * between the client-side and various backend services through RESTful API calls,
+ * focusing on event operations such as creation, display, filtering, sorting, and deletion.
+ * The script enhances the user interface by dynamically updating an HTML page with event data,
+ * utilizing modern web technologies for asynchronous data handling and DOM manipulation.
+ * 
+ * Key Features:
+ * - Dynamically submit new events to the backend and display them on an HTML page.
+ * - Provide interactive filtering by date and location, and sorting by time or location.
+ * - Enable users to delete events, with confirmation prompts for security.
+ * - Automatically populate filter dropdowns based on event data.
+ * 
+ * Structure:
+ * The script organizes functionalities into sections for ease of maintenance and scalability:
+ * - Utility functions for data transformation and validation.
+ * - Core functionalities that implement the script's main features.
+ * - Event handling and DOM manipulations for interactive UI elements.
+ * - API communication methods for interfacing with backend services.
+ * - Event filters and sorters to enhance data viewing.
+ * - Initialization and event listeners to bootstrap and respond to user actions.
+ * 
+ * Dependencies:
+ * Requires a web environment capable of ES6 and Fetch API. It should be connected to an HTML
+ * page designed with IDs and classes that match the script's selectors. Backend services must
+ * be properly configured and running to handle API requests.
+ *
+ * */
+
 const EVENT_BASE_URL = 'http://ec2-18-184-151-174.eu-central-1.compute.amazonaws.com/event'; 
 // const EVENT_BASE_URL = 'http://0.0.0.0:8081/event'; 
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    document.getElementById('calendarForm').addEventListener('submit', function(e) {
-        e.preventDefault();
-    });
-});
+/************* UTILITY AND HELPER FUNCTIONS **************/
 
+/**
+ * Transforms form data into the format required by the API.
+ * 
+ * @param {Object} initialData - Data collected from the form.
+ * @returns {Object} Transformed data ready for API submission.
+ */
 function transformEventData(initialData) {
 
     const attendeesArray = initialData.attendees.split(',').map(email => email.trim());
@@ -34,77 +68,13 @@ function transformEventData(initialData) {
     return transformedData;
 }
 
-async function filterEventsByDate() {
-    try {
-        const selectedDate = document.getElementById('dateFilter').value;
-        const events = await fetchEventsForUser(); 
 
-        const filteredEvents = events.filter(event => {
-
-            const eventDate = new Date(event.startDateTime).toISOString().split('T')[0];
-            return eventDate === selectedDate;
-        });
-
-        displayEvents(filteredEvents); 
-    } catch (error) {
-        console.error('Failed to filter events:', error);
-    }
-}
-
-async function sortEvents(criterion) {
-    try {
-        const events = await fetchEventsForUser(); 
-
-        let sortedEvents;
-        if (criterion === 'time') {
-
-            sortedEvents = events.sort((a, b) => new Date(a.startDateTime) - new Date(b.startDateTime));
-        } else if (criterion === 'location') {
-
-            sortedEvents = events.sort((a, b) => a.location.localeCompare(b.location));
-        }
-        displayEvents(sortedEvents); 
-    } catch (error) {
-        console.error('Failed to fetch or sort events:', error);
-    }
-}
-
-function logout() {
-
-    sessionStorage.clear(); 
-    localStorage.setItem('loggedInUserEmail', "None");
-    window.location.href = 'index.html';
-}
-
-function getEventsForCurrentUser() {
-    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); 
-    if (!loggedInUserId) {
-        console.log("No logged-in user.");
-        return;
-    }
-
-    const userEventsKey = `events_${loggedInUserId}`;
-    const eventsJson = localStorage.getItem(userEventsKey);
-
-    if (eventsJson) {
-        const userEvents = JSON.parse(eventsJson);
-        console.log(`Events for user ${loggedInUserId}:`, userEvents);
-        return userEvents;
-    } else {
-        console.log(`No events found for user ${loggedInUserId}.`);
-        return [];
-    }
-}
-
-window.onload = function() {
-    const savedEvents = localStorage.getItem('events');
-    if (savedEvents) {
-        events = JSON.parse(savedEvents);
-    }
-
-    displayEvents();
-};
-
+/**
+ * Validates the format of attendee emails.
+ * 
+ * @param {String} attendees - Comma-separated string of attendee emails.
+ * @returns {Boolean} True if all emails are valid, false otherwise.
+ */
 function validateAttendees(attendees) {
     const trimmedAttendees = attendees.trim();
     if (!trimmedAttendees) {
@@ -126,35 +96,13 @@ function validateAttendees(attendees) {
     return true;
 }
 
-function submitForm() {
-    const form = document.getElementById('calendarForm');
-    const formData = new FormData(form);
 
-    let formObject = {};
-    formData.forEach(function(value, key){
-        formObject[key] = value;
-    });
-
-    if (!validateFormData(formObject)) {
-        return; 
-    }
-
-    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); 
-    formObject['userId'] = loggedInUserId;
-
-    const response = apiFetchPost(formObject)
-
-    const userEventsKey = `events_${loggedInUserId}`;
-    const existingEvents = JSON.parse(localStorage.getItem(userEventsKey)) || [];
-
-    existingEvents.push(formObject);
-
-    localStorage.setItem(userEventsKey, JSON.stringify(existingEvents));
-
-    form.reset();
-    displayEvents();
-}
-
+/**
+ * Validates form data before submission.
+ * 
+ * @param {Object} formObject - The form data as an object.
+ * @returns {Boolean} True if the form data is valid, false otherwise.
+ */
 function validateFormData(formObject) {
     if (!formObject.title.trim()) {
         alert('Title is required.');
@@ -184,10 +132,61 @@ function validateFormData(formObject) {
     return validateAttendees(formObject.attendees);
 }
 
-function generateRandomUserID() {
-    return Math.floor(Math.random() * 10000) + 1;
+
+/************** CORE FUNCTIONALITIES **************/
+
+
+/**
+ * Handles form submission, including data validation, transformation, and API submission.
+ */
+function submitForm() {
+    const form = document.getElementById('calendarForm');
+    const formData = new FormData(form);
+
+    let formObject = {};
+    formData.forEach(function(value, key){
+        formObject[key] = value;
+    });
+
+    if (!validateFormData(formObject)) {
+        return; 
+    }
+
+    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); 
+    formObject['userId'] = loggedInUserId;
+
+    const response = apiFetchPost(formObject)
+
+    const userEventsKey = `events_${loggedInUserId}`;
+    const existingEvents = JSON.parse(localStorage.getItem(userEventsKey)) || [];
+
+    existingEvents.push(formObject);
+
+    localStorage.setItem(userEventsKey, JSON.stringify(existingEvents));
+
+    form.reset();
+    displayEvents();
 }
 
+/**
+ * Clears session and local storage to log out the user and redirects to the login page.
+ */
+function logout() {
+
+    sessionStorage.clear(); 
+    localStorage.setItem('loggedInUserEmail', "None");
+    window.location.href = 'index.html';
+}
+
+
+/*************** EVENT HANDLING AND DOM MANIPULATIONS **************/
+
+
+/**
+ * Displays events on the page. Optionally accepts an array of events to display, otherwise fetches events for the current user.
+ * 
+ * @param {Array} [optionalEvents] - An optional array of event objects to display.
+ */
 function displayEvents(optional) {
     const container = document.getElementById('eventsContainer');
     container.innerHTML = ''; 
@@ -237,57 +236,16 @@ function displayEvents(optional) {
     });
 }
 
-document.addEventListener('DOMContentLoaded', (event) => {
-    document.body.addEventListener('click', function(event) {
-        if (event.target.classList.contains('delete-btn')) {
-            const eventId = event.target.getAttribute('data-event-id');
-            deleteEvent(eventId);
-        }
-    });
-});
 
-function getEventsForCurrentUser() {
-    const loggedInUserId = localStorage.getItem('loggedInUserEmail'); 
+/*************** API COMMUNICATION **************/
 
-    if (!loggedInUserId) {
-        console.log("No logged-in user found.");
-        return [];
-    }
 
-    const userEventsKey = `events_${loggedInUserId}`;
-    const eventsJson = localStorage.getItem(userEventsKey);
-
-    const events = eventsJson ? JSON.parse(eventsJson) : [];
-
-    return events;
-}
-
-function populateLocationDropdown() {
-    const locationFilter = document.getElementById('locationFilter');
-    const events = getEventsForCurrentUser();
-
-    const uniqueLocations = Array.from(new Set(events.map(event => event.location)));
-
-    uniqueLocations.forEach(location => {
-        const option = document.createElement('option');
-        option.value = location;
-        option.textContent = location;
-        locationFilter.appendChild(option);
-    });
-
-}
-event/
-document.getElementById('applyLocationFilter').addEventListener('click', () => {
-    const selectedLocation = document.getElementById('locationFilter').value;
-    let filteredEvents = getEventsForCurrentUser();
-
-    if (selectedLocation !== "all") {
-        filteredEvents = filteredEvents.filter(event => event.location === selectedLocation);
-    }
-
-    displayEvents(filteredEvents); 
-});
-
+/**
+ * Posts event data to the API.
+ * 
+ * @param {Object} data - The event data to post.
+ * @returns {Promise} A promise that resolves with the API response.
+ */
 async function apiFetchPost(data) {
     let url = EVENT_BASE_URL + '/create';
     const token = localStorage.getItem('token');
@@ -311,6 +269,11 @@ async function apiFetchPost(data) {
     return response.json();
 }
 
+/**
+ * Fetches events for the current user from the API.
+ * 
+ * @returns {Promise<Array>} A promise that resolves with an array of event objects.
+ */
 async function fetchEventsForUser() {
     try {
         const token = localStorage.getItem('token'); 
@@ -342,6 +305,11 @@ async function fetchEventsForUser() {
     }
 }
 
+/**
+ * Sends a request to delete an event via the API.
+ * 
+ * @param {String} eventId - The ID of the event to delete.
+ */
 async function deleteEvent(eventId) {
     try {
         const response = await fetch(EVENT_BASE_URL + `/${eventId}`, {
@@ -363,3 +331,79 @@ async function deleteEvent(eventId) {
     }
     displayEvents(); 
 }
+
+/** EVENT FILTERS AND SORTERS */
+
+
+/**
+ * Sorts events based on a specified criterion ('time' or 'location').
+ * 
+ * @param {String} criterion - The criterion by which to sort events.
+ */
+async function sortEvents(criterion) {
+    try {
+        const events = await fetchEventsForUser(); 
+
+        let sortedEvents;
+        if (criterion === 'time') {
+
+            sortedEvents = events.sort((a, b) => new Date(a.startDateTime) - new Date(b.startDateTime));
+        } else if (criterion === 'location') {
+
+            sortedEvents = events.sort((a, b) => a.location.localeCompare(b.location));
+        }
+        displayEvents(sortedEvents); 
+    } catch (error) {
+        console.error('Failed to fetch or sort events:', error);
+    }
+}
+
+/**
+ * Filters events to those occurring on a specified date.
+ */
+async function filterEventsByDate() {
+    try {
+        const selectedDate = document.getElementById('dateFilter').value;
+        const events = await fetchEventsForUser(); 
+
+        const filteredEvents = events.filter(event => {
+
+            const eventDate = new Date(event.startDateTime).toISOString().split('T')[0];
+            return eventDate === selectedDate;
+        });
+
+        displayEvents(filteredEvents); 
+    } catch (error) {
+        console.error('Failed to filter events:', error);
+    }
+}
+
+/*************** EVENT LISTENERS **************/
+
+/**
+ * Initializes application functionalities once the DOM content has fully loaded.
+ * This includes setting up form submission behavior and handling click events for dynamically generated delete buttons.
+ */
+document.addEventListener('DOMContentLoaded', (event) => {
+    document.getElementById('calendarForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        submitForm(); 
+    });
+
+    document.body.addEventListener('click', function(event) {
+        if (event.target.classList.contains('delete-btn')) {
+            const eventId = event.target.getAttribute('data-event-id');
+            deleteEvent(eventId);
+        }
+    });
+    displayEvents();
+});
+
+
+
+
+
+
+
+
+

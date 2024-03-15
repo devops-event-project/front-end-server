@@ -1,3 +1,15 @@
+/*
+This CSS file styles a web application focused on event management, 
+emphasizing a clean and user-friendly design. It defines the appearance 
+of text, buttons, and event containers, utilizing background colors, 
+padding, and borders to enhance readability and interactivity. Flexbox 
+is used for layout organization, ensuring content is responsive and 
+well-arranged. Key elements like event boxes and buttons are designed 
+to stand out, with specific styles applied for interactive elements to 
+indicate actions like deletion. Overall, the CSS aims to provide a 
+visually appealing and intuitive interface for users.
+*/
+
 body {
     font-family: Arial, sans-serif;
     background-color: #f8f8f8; 
