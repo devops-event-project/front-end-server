@@ -1,4 +1,4 @@
-const EVENT_BASE_URL = 'http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event'; 
+const EVENT_BASE_URL = 'http://ec2-18-184-151-174.eu-central-1.compute.amazonaws.com/event'; 
 // const EVENT_BASE_URL = 'http://0.0.0.0:8081/event'; 
 
 document.addEventListener('DOMContentLoaded', (event) => {

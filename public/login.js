@@ -1,4 +1,4 @@
-const USER_BASE_URL = 'http://ec2-3-127-107-64.eu-central-1.compute.amazonaws.com/user'; 
+const USER_BASE_URL = 'http://ec2-35-156-28-191.eu-central-1.compute.amazonaws.com/user'; 
 // const USER_BASE_URL = 'http://0.0.0.0:8080/user'; 
 
 function getUserData(email) {
