@@ -25,7 +25,6 @@ async function handleSignUp(email, password) {
         password: password,
         is_admin: false
     };
-    console.log(JSON.stringify(registrationData));
     try {
         const response = await fetch(USER_BASE_URL + '/register', { 
             method: 'POST',
@@ -90,8 +89,6 @@ async function handleLogin(email, password) {
         }
 
         const data = await response.json();
-        console.log("ACCESS TOKEN, HERE WE ARE");
-        console.log(data.access_token);
 
         localStorage.setItem('token', data.access_token);
         localStorage.setItem('loggedInUserEmail', email);

@@ -8,7 +8,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
 });
 
 function transformEventData(initialData) {
-    console.log("INITIAL DATA ", initialData);
 
     const attendeesArray = initialData.attendees.split(',').map(email => email.trim());
 
@@ -32,7 +31,6 @@ function transformEventData(initialData) {
         })),
     };
 
-    console.log("TRANSFORMED DATA ", transformedData);
     return transformedData;
 }
 
@@ -65,7 +63,6 @@ async function sortEvents(criterion) {
 
             sortedEvents = events.sort((a, b) => a.location.localeCompare(b.location));
         }
-        console.log("SORTED EVENTS ", sortedEvents)
         displayEvents(sortedEvents); 
     } catch (error) {
         console.error('Failed to fetch or sort events:', error);
@@ -145,10 +142,7 @@ function submitForm() {
     const loggedInUserId = localStorage.getItem('loggedInUserEmail'); 
     formObject['userId'] = loggedInUserId;
 
-    console.log("EVENT TO POST ", formObject)
     const response = apiFetchPost(formObject)
-
-    console.log("RESPONSE here form submission(POST): ", response)
 
     const userEventsKey = `events_${loggedInUserId}`;
     const existingEvents = JSON.parse(localStorage.getItem(userEventsKey)) || [];
@@ -157,7 +151,6 @@ function submitForm() {
 
     localStorage.setItem(userEventsKey, JSON.stringify(existingEvents));
 
-    console.log('Event added:', formObject);
     form.reset();
     displayEvents();
 }
@@ -204,7 +197,6 @@ function displayEvents(optional) {
     let eventsToDisplayPromise = optional ? Promise.resolve(optional) :fetchEventsForUser();
 
     eventsToDisplayPromise.then(events => {
-        console.log("(GET)EVENTS FROM BACK END", events);
 
         events.forEach((event, index) => {
             const startTime = new Date(event.startDateTime).toLocaleString('en-GB', {
@@ -249,7 +241,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
     document.body.addEventListener('click', function(event) {
         if (event.target.classList.contains('delete-btn')) {
             const eventId = event.target.getAttribute('data-event-id');
-            console.log("Delete button clicked, EVENT ID IS", eventId);
             deleteEvent(eventId);
         }
     });
@@ -317,18 +308,12 @@ async function apiFetchPost(data) {
         const errorMessage = await response.text();
         throw new Error(errorMessage);
     }
-    else{
-        console.log("POST WAS SUCCESFUL!!!!!")
-        // displayEvents();
-    }
-
     return response.json();
 }
 
 async function fetchEventsForUser() {
     try {
         const token = localStorage.getItem('token'); 
-        console.log("FUCKING TOKEN ", token);
 
         // let url = 'http://ec2-3-123-33-105.eu-central-1.compute.amazonaws.com/event/';
         let url = EVENT_BASE_URL;
@@ -367,9 +352,7 @@ async function deleteEvent(eventId) {
                 'Accept': 'application/json',
             }
         });
-        console.log("RESPONSE IS ", response);
         if (response.ok) {
-            console.log(reponse)
             console.log('Event deleted successfully');            
         }
     
